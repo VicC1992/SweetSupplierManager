@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container-fluid px-0">
+    <header class="header-container d-flex flex-wrap align-items-center justify-content-between py-3 mb-4 w-100">
+        <div class="d-flex align-items-center me-auto">
+            <a href="/" class="d-inline-flex link-body-emphasis text-decoration-none me-3">
+                <svg class="bi" width="40" height="32" role="img" aria-label="Bootstrap">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+            <span class="navbar-title">Sweet Supplier Manager</span>
+        </div>
+
+        <div class="ms-auto text-end">
+            <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>
+            <a th:href="@{/register}" class="btn btn-primary">Sign-up</a>
+        </div>
+    </header>
+</div>
+</body>
+
+</html>
