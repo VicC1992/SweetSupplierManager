@@ -1,6 +1,8 @@
 package com.mybakery.sweet_suppliers.controller;
 
+import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
+import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -27,11 +29,14 @@ public class AdminController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @GetMapping("/users")
-    public String listUsers(Model model) {
-        List<User> listUsers = userRepository.findAll();
-        model.addAttribute("listUsers", listUsers);
-        return "users_for_admin";
+    @Autowired
+    private SupplierRepository supplierRepository;
+
+    @GetMapping("/suppliers")
+    public String listSuppliers(Model model) {
+        List<Supplier> listSuppliers = supplierRepository.findAll();
+        model.addAttribute("listSuppliers", listSuppliers);
+        return "suppliers_list";
     }
 
 }

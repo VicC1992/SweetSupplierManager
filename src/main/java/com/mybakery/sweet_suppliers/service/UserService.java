@@ -15,7 +15,7 @@ public class UserService {
 
     @Autowired
     private RoleRepository roleRepository;
-    @Transactional
+   @Transactional
     public void assignRoleToUser(Long userId, Long roleId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

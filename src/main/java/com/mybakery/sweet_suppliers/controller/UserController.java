@@ -1,7 +1,9 @@
 package com.mybakery.sweet_suppliers.controller;
 
 import com.mybakery.sweet_suppliers.entity.Role;
+import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
+import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -44,4 +49,10 @@ public class UserController {
         return "users";
     }
 
+    @GetMapping("/suppliers")
+    public String listSuppliers(Model model) {
+        List<Supplier> listSuppliers = supplierRepository.findAll();
+        model.addAttribute("listSuppliers", listSuppliers);
+        return "suppliers_list";
+    }
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="ISO-8859-1">
-    <title>List Users</title>
+    <title>List Suppliers</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
@@ -18,13 +18,7 @@
             </button>
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-
-                <span class="navbar-text text-white" th:text="'Welcome ' + ${#authentication.principal.firstName}"></span>
-
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers}">Suppliers List</a>
-                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/suppliers/add}">Add new supplier</a>
                     </li>
@@ -46,23 +40,29 @@
 <div class="container text-center">
     <br>
     <div>
-        <h1>List of Users</h1>
+        <h1>List of Suppliers</h1>
     </div>
     <br>
     <div>
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>E-mail</th>
+                <th>Supplier Name</th>
+                <th>CUI</th>
+                <th>Contact Person</th>
+                <th>Phone Number</th>
+                <th>See details</th>
+                <th>Edit supplier</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="user: ${listUsers}">
-                <td th:text="${user.firstName}">First Name</td>
-                <td th:text="${user.lastName}">Last Name</td>
-                <td th:text="${user.email}">E-mail</td>
+            <tr th:each="supplier: ${listSuppliers}">
+                <td th:text="${supplier.name}">Supplier Name</td>
+                <td th:text="${supplier.registrationUniqueCode}">CUI</td>
+                <td th:text="${supplier.contactPerson}">Contact Person</td>
+                <td th:text="${supplier.phoneNumber}">Phone Number</td>
+                <td><a th:href="@{/suppliers/{id}/products(id=${supplier.id})}" class="btn btn-info">See products</a></td>
+                <td><a th:href="@{/suppliers/edit/{id}(id = ${supplier.id})}" class="btn btn-warning">Edit</a></td>
             </tr>
             </tbody>
         </table>

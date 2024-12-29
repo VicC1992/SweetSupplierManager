@@ -9,5 +9,4 @@ public class SweetSupplierManagerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SweetSupplierManagerApplication.class, args);
 	}
-
 }

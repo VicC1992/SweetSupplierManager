@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="ISO-8859-1">
-    <title>List Users</title>
+    <title>List Suppliers</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
@@ -18,18 +18,9 @@
             </button>
 
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-
-                <span class="navbar-text text-white" th:text="'Welcome ' + ${#authentication.principal.firstName}"></span>
-
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers}">Suppliers List</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/add}">Add new supplier</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="'/user/' + ${#authentication.principal.id}">My profile</a>
+                        <a class="nav-link"th:href="@{/suppliers/{supplierId}/add-product(supplierId=${supplier.id})}">Add new product</a>
                     </li>
                 </ul>
 
@@ -43,30 +34,29 @@
 
 
 
-<div class="container text-center">
-    <br>
-    <div>
-        <h1>List of Users</h1>
-    </div>
-    <br>
-    <div>
-        <table class="table table-striped table-bordered">
-            <thead class="thead-dark">
-            <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>E-mail</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="user: ${listUsers}">
-                <td th:text="${user.firstName}">First Name</td>
-                <td th:text="${user.lastName}">Last Name</td>
-                <td th:text="${user.email}">E-mail</td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+<div class="container">
+    <h1>Products for Supplier: <span th:text="${supplier.name}">Supplier Name</span></h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Unit of Measure</th>
+            <th>Description</th>
+            <th>Non-Conformities</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.product.name}">Product Name</td>
+            <td th:text="${product.price}">Price</td>
+            <td th:text="${product.unitOfMeasure}">Unit of Measure</td>
+            <td th:text="${product.productDescription}">Description</td>
+            <td th:text="${product.nonConformities}">Non-Conformities</td>
+        </tr>
+        </tbody>
+    </table>
+    <a th:href="@{/suppliers}" class="btn btn-secondary">Back to Suppliers</a>
 </div>
 </body>
 
