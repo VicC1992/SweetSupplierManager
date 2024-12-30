@@ -47,6 +47,5 @@ public class SupplierController {
         existingSupplier.setDeliveryDays(new ArrayList<>(Arrays.asList(deliveryDays.split(","))));
         supplierService.updateSupplier(existingSupplier);
         return "redirect:/suppliers";
-
     }
 }

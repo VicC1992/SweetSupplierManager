@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.entity;
 
+import com.mybakery.sweet_suppliers.Enums.ProductStatus;
 import com.mybakery.sweet_suppliers.Enums.UnitOfMeasure;
 import jakarta.persistence.*;
 
@@ -27,6 +28,9 @@ public class SupplierProduct {
     private String productDescription;
 
     private String nonConformities;
+
+    @Enumerated(EnumType.STRING)
+    private ProductStatus productStatus;
 
 
     //Getteri si setteri
@@ -69,6 +73,14 @@ public class SupplierProduct {
 
     public void setUnitOfMeasure(UnitOfMeasure unitOfMeasure) {
         this.unitOfMeasure = unitOfMeasure;
+    }
+
+    public ProductStatus getProductStatus() {
+        return productStatus;
+    }
+
+    public void setProductStatus(ProductStatus productStatus) {
+        this.productStatus = productStatus;
     }
 
     public String getProductDescription() {

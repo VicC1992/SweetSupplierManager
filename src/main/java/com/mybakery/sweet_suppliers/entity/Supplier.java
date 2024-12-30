@@ -93,4 +93,15 @@ public class Supplier {
     public void setSupplierProducts(List<SupplierProduct> supplierProducts) {
         this.supplierProducts = supplierProducts;
     }
+
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "name='" + name + '\'' +
+                ", registrationUniqueCode='" + registrationUniqueCode + '\'' +
+                ", contactPerson='" + contactPerson + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", deliveryDays=" + deliveryDays +
+                '}';
+    }
 }

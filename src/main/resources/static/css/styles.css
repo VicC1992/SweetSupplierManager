@@ -1,0 +1,47 @@
+/* General styling for radio labels */
+.status-label {
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.status-label:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific colors for each status */
+.status-active {
+    background-color: green;
+}
+
+.status-active:hover {
+    background-color: darkgreen;
+}
+
+.status-inactive {
+    background-color: red;
+}
+
+.status-inactive:hover {
+    background-color: darkred;
+}
+
+.status-probe {
+    background-color: yellow;
+    color: black; /* Better contrast for yellow */
+}
+
+.status-probe:hover {
+    background-color: goldenrod;
+}
+
+/* Hide default radio button and style label as clickable */
+input[type="radio"] {
+    display: none;
+}
+
+input[type="radio"]:checked + .status-label {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

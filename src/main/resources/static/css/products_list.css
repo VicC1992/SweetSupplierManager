@@ -1,0 +1,20 @@
+
+.status-label {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+.status-label.Activ {
+    background-color: green;
+}
+
+.status-label.Inactiv {
+    background-color: red;
+}
+
+.status-label.Test {
+    background-color: yellow;
+    color: black;
+}

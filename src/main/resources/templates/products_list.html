@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/products_list.css">
 </head>
 
 <body>
@@ -44,6 +45,9 @@
             <th>Unit of Measure</th>
             <th>Description</th>
             <th>Non-Conformities</th>
+            <th>Edit product</th>
+            <th>Add to order</th>
+            <th>Product Status</th>
         </tr>
         </thead>
         <tbody>
@@ -53,6 +57,13 @@
             <td th:text="${product.unitOfMeasure}">Unit of Measure</td>
             <td th:text="${product.productDescription}">Description</td>
             <td th:text="${product.nonConformities}">Non-Conformities</td>
+            <td><a class="btn btn-warning">Edit</a></td>
+            <td><a class="btn btn-success">Add</a></td>
+            <td>
+                <span th:class="'status-label ' + ${product.productStatus}">
+                <span th:text="${product.productStatus}">Status</span>
+                </span>
+            </td>
         </tr>
         </tbody>
     </table>
