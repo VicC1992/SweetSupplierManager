@@ -48,4 +48,10 @@ public class SupplierController {
         supplierService.updateSupplier(existingSupplier);
         return "redirect:/suppliers";
     }
+
+    @PostMapping("/suppliers/delete/{id}")
+    public String deleteSupplier(@PathVariable Long id) {
+        supplierService.deleteById(id);
+        return "redirect:/suppliers";
+    }
 }

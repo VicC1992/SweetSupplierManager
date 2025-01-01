@@ -73,4 +73,39 @@ public class ProductController {
         supplierService.saveSupplier(supplier);
         return "redirect:/suppliers/" + supplierId + "/products";
     }
+
+    @GetMapping("/suppliers/{supplierId}/edit-product/{supplierProductId}")
+    public String showEditProductForm(@PathVariable Long supplierId, @PathVariable Long supplierProductId, Model model) {
+        SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
+        Supplier supplier = supplierService.findById(supplierId);
+            model.addAttribute("supplierProduct", supplierProduct);
+            model.addAttribute("supplierId", supplierId);
+            model.addAttribute("supplier", supplier);
+            model.addAttribute("supplierProductId", supplierProductId);
+            model.addAttribute("unitsOfMeasure", UnitOfMeasure.values());
+            return "edit_product_form";
+    }
+
+    @PostMapping("/suppliers/{supplierId}/edit-product/{supplierProductId}")
+    public String editProduct(@PathVariable Long supplierId, @PathVariable Long supplierProductId, @ModelAttribute SupplierProduct supplierProduct) {
+        SupplierProduct existingProduct = supplierProductService.findById(supplierProductId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
+            existingProduct.setPrice(supplierProduct.getPrice());
+            existingProduct.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
+            existingProduct.setProductDescription(supplierProduct.getProductDescription());
+            existingProduct.setNonConformities(supplierProduct.getNonConformities());
+            existingProduct.setProductStatus(supplierProduct.getProductStatus());
+
+            supplierProductService.save(existingProduct);
+            return "redirect:/suppliers/" + supplierId + "/products";
+    }
+
+    @PostMapping("/suppliers/{supplierId}/delete-product/{supplierProductId}")
+    public String deleteProduct(@PathVariable Long supplierId, @PathVariable Long supplierProductId) {
+        SupplierProduct existingProduct = supplierProductService.findById(supplierProductId)
+                        .orElseThrow(()->new IllegalArgumentException("Invalid product ID:" + supplierProductId));
+        supplierProductService.deleteById(supplierProductId);
+        return "redirect:/suppliers/" + supplierId + "/products";
+    }
 }

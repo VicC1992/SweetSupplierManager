@@ -37,4 +37,8 @@ public class SupplierService {
         supplierRepository.save(supplier);
     }
 
+    public void deleteById(Long id) {
+        supplierRepository.deleteById(id);
+    }
+
 }
