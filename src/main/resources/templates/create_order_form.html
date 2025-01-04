@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Create a New Order</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<h1>Create a New Order</h1>
+<form th:action="@{/orders/create}" th:object="${order}" method="post">
+    <label for="name">Order Name:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+    <br>
+
+    <label for="status">Status:</label>
+    <input type="text" id="status" th:field="*{status}" required>
+    <br>
+
+    <button type="submit">Create Order</button>
+</form>
+</body>
+
+</html>
