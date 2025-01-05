@@ -39,7 +39,7 @@ public class ProductController {
         return "products_list";
     }
 
-    @GetMapping("/add-product/{supplierId}")
+    @GetMapping("/add/{supplierId}")
     public String showAddProductForm(@PathVariable Long supplierId, Model model) {
         Supplier supplier = supplierService.findById(supplierId);
         model.addAttribute("supplierId", supplierId);
@@ -49,7 +49,7 @@ public class ProductController {
         return "add_new_product_form";
     }
 
-    @PostMapping("/add-product/{supplierId}")
+    @PostMapping("/add/{supplierId}")
     public String addProductToSupplier(
             @PathVariable Long supplierId,
             @ModelAttribute SupplierProduct supplierProduct) {
