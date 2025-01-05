@@ -13,7 +13,7 @@
 <body>
 <div class="container text-center">
     <h1>Edit Product</h1>
-    <form th:action="@{/suppliers/{supplierId}/edit-product/{supplierProductId}(supplierId=${supplierId}, supplierProductId=${supplierProduct.id})}"
+    <form th:action="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplierId}, supplierProductId=${supplierProduct.id})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
         <!-- Camp ascuns pentru ID-ul produsului -->
         <input type="hidden" th:field="*{product.id}" />

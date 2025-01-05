@@ -21,7 +21,7 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link"th:href="@{/suppliers/{supplierId}/add-product(supplierId=${supplier.id})}">Add new product</a>
+                        <a class="nav-link"th:href="@{/products/add-product/{supplierId}(supplierId=${supplier.id})}">Add new product</a>
                     </li>
                 </ul>
 
@@ -58,9 +58,9 @@
             <td th:text="${product.unitOfMeasure}">Unit of Measure</td>
             <td th:text="${product.productDescription}">Description</td>
             <td th:text="${product.nonConformities}">Non-Conformities</td>
-            <td><a <a th:href="@{/suppliers/{supplierId}/edit-product/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
+            <td><a <a th:href="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
             <td>
-                <form th:action="@{/suppliers/{supplierId}/delete-product/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" method="post">
+                <form th:action="@{/products/delete/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" method="post">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>

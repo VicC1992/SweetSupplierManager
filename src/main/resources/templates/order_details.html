@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Order Details</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<h1>Order Details</h1>
+
+<div>
+    <p><strong>Order Name:</strong> <span th:text="${order.name}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+</div>
+
+<h2>Products</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Unit of Measure</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${orderItems}">
+        <td th:text="${item.product.name}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.unitOfMeasure}"></td>
+        <td>
+            <a th:href="@{/orders/{orderId}/remove-product(orderId=${order.id}, itemId=${item.id})}">
+                Remove
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<a th:href="@{/orders}">Back to Orders</a>
+<a th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">Add Product</a>
+</body>
+
+</html>

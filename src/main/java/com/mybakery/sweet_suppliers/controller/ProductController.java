@@ -11,14 +11,12 @@ import com.mybakery.sweet_suppliers.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("products")
 public class ProductController {
     @Autowired
     private SupplierProductRepository supplierProductRepository;
@@ -32,7 +30,7 @@ public class ProductController {
     @Autowired
     private SupplierProductService supplierProductService;
 
-    @GetMapping("/suppliers/{supplierId}/products")
+    @GetMapping("/list/{supplierId}")
     public String viewSupplierProducts(@PathVariable Long supplierId, Model model) {
         Supplier supplier = supplierService.findById(supplierId);
         List<SupplierProduct> supplierProducts = supplier.getSupplierProducts();
@@ -41,7 +39,7 @@ public class ProductController {
         return "products_list";
     }
 
-    @GetMapping("/suppliers/{supplierId}/add-product")
+    @GetMapping("/add-product/{supplierId}")
     public String showAddProductForm(@PathVariable Long supplierId, Model model) {
         Supplier supplier = supplierService.findById(supplierId);
         model.addAttribute("supplierId", supplierId);
@@ -51,7 +49,7 @@ public class ProductController {
         return "add_new_product_form";
     }
 
-    @PostMapping("/suppliers/{supplierId}/add-product")
+    @PostMapping("/add-product/{supplierId}")
     public String addProductToSupplier(
             @PathVariable Long supplierId,
             @ModelAttribute SupplierProduct supplierProduct) {
@@ -71,10 +69,10 @@ public class ProductController {
 
         supplier.getSupplierProducts().add(supplierProduct);
         supplierService.saveSupplier(supplier);
-        return "redirect:/suppliers/" + supplierId + "/products";
+        return "redirect:/products/list/" + supplierId;
     }
 
-    @GetMapping("/suppliers/{supplierId}/edit-product/{supplierProductId}")
+    @GetMapping("/edit/{supplierId}/{supplierProductId}")
     public String showEditProductForm(@PathVariable Long supplierId, @PathVariable Long supplierProductId, Model model) {
         SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
@@ -87,7 +85,7 @@ public class ProductController {
             return "edit_product_form";
     }
 
-    @PostMapping("/suppliers/{supplierId}/edit-product/{supplierProductId}")
+    @PostMapping("/edit/{supplierId}/{supplierProductId}")
     public String editProduct(@PathVariable Long supplierId, @PathVariable Long supplierProductId, @ModelAttribute SupplierProduct supplierProduct) {
         SupplierProduct existingProduct = supplierProductService.findById(supplierProductId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
@@ -98,14 +96,14 @@ public class ProductController {
             existingProduct.setProductStatus(supplierProduct.getProductStatus());
 
             supplierProductService.save(existingProduct);
-            return "redirect:/suppliers/" + supplierId + "/products";
+            return "redirect:/products/list/" + supplierId;
     }
 
-    @PostMapping("/suppliers/{supplierId}/delete-product/{supplierProductId}")
+    @PostMapping("/delete/{supplierId}/{supplierProductId}")
     public String deleteProduct(@PathVariable Long supplierId, @PathVariable Long supplierProductId) {
         SupplierProduct existingProduct = supplierProductService.findById(supplierProductId)
                         .orElseThrow(()->new IllegalArgumentException("Invalid product ID:" + supplierProductId));
         supplierProductService.deleteById(supplierProductId);
-        return "redirect:/suppliers/" + supplierId + "/products";
+        return "redirect:/products/list/" + supplierId;
     }
 }

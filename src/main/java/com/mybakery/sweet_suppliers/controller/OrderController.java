@@ -2,6 +2,7 @@ package com.mybakery.sweet_suppliers.controller;
 
 import com.mybakery.sweet_suppliers.dto.OrderItemRequest;
 import com.mybakery.sweet_suppliers.dto.OrderRequest;
+import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.service.OrderService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,21 @@ public class OrderController {
     public String addProductToOrder(@PathVariable Long orderId, @ModelAttribute OrderItemRequest orderItemRequest) {
         orderService.addProductToOrder(orderId, orderItemRequest.getProductId(), orderItemRequest.getQuantity());
         return "redirect:/orders/" + orderId + "/details";
+    }
+
+    @GetMapping("see-all")
+    public String viewALlOrders(Model model) {
+        model.addAttribute("orders", orderService.getAllOrders());
+        return "orders_list";
+    }
+
+    @GetMapping("/{orderId}/details")
+    public String viewOrderDetails(@PathVariable Long orderId, Model model) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
+
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", order.getOrderItems());
+        return "order_details";
     }
 }

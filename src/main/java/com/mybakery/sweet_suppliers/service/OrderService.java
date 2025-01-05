@@ -2,6 +2,7 @@ package com.mybakery.sweet_suppliers.service;
 
 import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.OrderItem;
+import com.mybakery.sweet_suppliers.entity.Product;
 import com.mybakery.sweet_suppliers.entity.SupplierProduct;
 import com.mybakery.sweet_suppliers.repository.OrderRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
@@ -50,13 +51,15 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
 
-        SupplierProduct product = supplierProductRepository.findById(productId)
+        SupplierProduct supplierProduct = supplierProductRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found with ID: " + productId));
+
+        Product product = supplierProduct.getProduct();
 
         OrderItem orderItem = new OrderItem();
         orderItem.setProduct(product);
         orderItem.setQuantity(quantity);
-        orderItem.setUnitOfMeasure(product.getUnitOfMeasure());
+        orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
         order.addOrderItem(orderItem);
         orderRepository.save(order);
     }
