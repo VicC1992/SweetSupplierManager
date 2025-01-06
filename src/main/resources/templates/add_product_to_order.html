@@ -12,17 +12,19 @@
 <body>
 <h1>Add Product to Order</h1>
 
-<form th:action="@{/orders/{orderId}/add-product(orderId=${orderId})}" th:method="post">
+<form th:action="@{/orders/{orderId}/add-product(orderId=${orderId})}"
+      th:method="post" th:object="${orderItemRequest}">
+
     <label for="product">Select Product:</label>
-    <select id="product" name="productId" required>
+    <select id="product" th:field="*{productId}" required>
         <option value="" disabled selected>-- Select a product --</option>
-        <option th:each="product : ${products}"
-                th:value="${product.id}"
-                th:text="${product.name}"></option>
+        <option th:each="supplierProduct : ${supplierProducts}"
+                th:value="${supplierProduct.product.id}"
+                th:text="${supplierProduct.product.name}"></option>
     </select>
 
     <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" min="1" required />
+    <input type="number" id="quantity" th:field="*{quantity}" min="1" required />
 
     <button type="submit">Add Product</button>
 </form>

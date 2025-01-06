@@ -48,11 +48,4 @@ public class UserController {
         model.addAttribute("listUsers", listUsers);
         return "users";
     }
-
-    @GetMapping("/suppliers")
-    public String listSuppliers(Model model) {
-        List<Supplier> listSuppliers = supplierRepository.findAll();
-        model.addAttribute("listSuppliers", listSuppliers);
-        return "suppliers_list";
-    }
 }
