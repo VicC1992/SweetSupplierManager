@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Add Supplier</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<h1>Select an Order to Add Product</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>Order Name</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}">Order ID</td> <!-- Afi?eaz? ID-ul comenzii -->
+        <td th:text="${order.name}">Order Name</td> <!-- Numele comenzii -->
+        <td>
+            <form th:action="@{/orders/{orderId}/add-product-direct/{productId}(orderId=${order.id}, productId=${productId})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="btn btn-success">Add to Order</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/products}" class="btn btn-secondary">Back</a>
+
+<div>
+    <p>Product ID: <span th:text="${productId}">Product ID</span></p>
+    <p>Orders:</p>
+    <ul>
+        <li th:each="order : ${orders}">
+            Order ID: <span th:text="${order.id}">Order ID</span>, Name: <span th:text="${order.name}">Order Name</span>
+        </li>
+    </ul>
+</div>
+</body>
+
+</html>

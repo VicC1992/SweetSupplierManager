@@ -38,7 +38,7 @@
 <div class="container">
     <h1>Products for Supplier: <span th:text="${supplier.name}">Supplier Name</span></h1>
     <table class="table table-striped">
-        <thead>
+        <thead class="thead-dark">
         <tr>
             <th>Product Name</th>
             <th>Price</th>
@@ -58,13 +58,14 @@
             <td th:text="${product.unitOfMeasure}">Unit of Measure</td>
             <td th:text="${product.productDescription}">Description</td>
             <td th:text="${product.nonConformities}">Non-Conformities</td>
-            <td><a <a th:href="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
+            <td>
+                <a th:href="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
             <td>
                 <form th:action="@{/products/delete/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" method="post">
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
-            <td><a class="btn btn-success">Add</a></td>
+            <td><a th:href="@{/orders/select-order-to-add-product/{productId}(productId=${product.product.id})}" class="btn btn-success">Add</a></td>
             <td>
                 <span th:class="'status-label ' + ${product.productStatus}">
                 <span th:text="${product.productStatus}">Status</span>

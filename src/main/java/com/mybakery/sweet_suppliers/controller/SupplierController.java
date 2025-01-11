@@ -41,7 +41,7 @@ public class SupplierController {
     public String addSupplier(Supplier supplier, String deliveryDays) {
         supplier.setDeliveryDays(Arrays.asList(deliveryDays.split(",")));
         supplierService.addSupplier(supplier);
-        return "redirect:/suppliers";
+        return "redirect:/suppliers/list";
     }
 
     @GetMapping("/edit/{id}")

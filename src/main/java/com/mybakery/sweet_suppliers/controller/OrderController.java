@@ -61,7 +61,36 @@ public class OrderController {
         orderItem.setOrder(order);
         orderItem.setProduct(supplierProduct.getProduct());
         orderItem.setQuantity(orderItemRequest.getQuantity());
-        orderItem.setUnitOfMeasure(supplierProduct.getProduct().getUnitOfMeasure());
+        orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
+        orderItemRepository.save(orderItem);
+        return "redirect:/orders/" + orderId + "/details";
+    }
+
+    @GetMapping("/select-order-to-add-product/{productId}")
+    public String showOrdersForProduct(@PathVariable Long productId, Model model) {
+        List<Order> orders = orderService.getAllOrders();
+        if (orders.isEmpty()) {
+            throw new IllegalStateException("No orders found.");
+        }
+        System.out.println("Produc ID:" + productId);
+        orders.forEach(order -> System.out.println("Order ID:" + order.getId()));
+        model.addAttribute("orders", orders);
+        model.addAttribute("productId", productId);
+        return "select_order";
+    }
+
+    @PostMapping("/{orderId}/add-product-direct/{productId}")
+    public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long productId) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(()-> new IllegalArgumentException("Order not found with Id:" + orderId));
+        SupplierProduct supplierProduct = supplierProductService.findById(productId)
+                .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + productId));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setProduct(supplierProduct.getProduct());
+        orderItem.setQuantity(1);
+        orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
+        orderItem.setPrice(supplierProduct.getPrice());
         orderItemRepository.save(orderItem);
         return "redirect:/orders/" + orderId + "/details";
     }
@@ -80,5 +109,27 @@ public class OrderController {
         model.addAttribute("order", order);
         model.addAttribute("orderItems", order.getOrderItems());
         return "order_details";
+    }
+
+    @PostMapping("/{orderId}/update-quantity/{itemId}")
+    public String updateProductQuantity(@PathVariable Long orderId,
+                                        @PathVariable Long itemId,
+                                        @RequestParam int quantity) {
+        OrderItem orderItem = orderItemRepository.findById(itemId)
+                .orElseThrow(()-> new IllegalArgumentException("Order Item not found with ID:" + itemId));
+        if (quantity <= 0) {
+            throw new IllegalStateException("Quantity must be greater than zero.");
+        }
+        orderItem.setQuantity(quantity);
+        orderItemRepository.save(orderItem);
+        return "redirect:/orders/" + orderId + "/details";
+    }
+
+    @PostMapping("/{orderId}/remove-product/{itemId}")
+    public String removeProductFromOrder(@PathVariable Long orderId, @PathVariable Long itemId) {
+        OrderItem orderItem = orderItemRepository.findById(itemId)
+                .orElseThrow(()-> new IllegalArgumentException("OrderItem not found with ID:" + itemId));
+        orderItemRepository.delete(orderItem);
+        return "redirect:/orders/" + orderId + "/details";
     }
 }
