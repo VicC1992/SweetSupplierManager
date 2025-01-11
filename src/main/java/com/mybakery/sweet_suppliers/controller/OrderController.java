@@ -6,13 +6,20 @@ import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.OrderItem;
 import com.mybakery.sweet_suppliers.entity.SupplierProduct;
 import com.mybakery.sweet_suppliers.repository.OrderItemRepository;
+import com.mybakery.sweet_suppliers.service.OrderItemService;
 import com.mybakery.sweet_suppliers.service.OrderService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
+import com.mybakery.sweet_suppliers.util.PdfGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 @Controller
@@ -21,6 +28,10 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderItemService orderItemService;
+
     @Autowired
     private SupplierProductService supplierProductService;
 
@@ -131,5 +142,24 @@ public class OrderController {
                 .orElseThrow(()-> new IllegalArgumentException("OrderItem not found with ID:" + itemId));
         orderItemRepository.delete(orderItem);
         return "redirect:/orders/" + orderId + "/details";
+    }
+
+    @GetMapping("/{orderId}/download-pdf")
+    public ResponseEntity<byte[]>downloaderPdf(@PathVariable Long orderId) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
+        List<OrderItem> orderItems = orderItemService.getOrderItemsByOrderId(orderId);
+
+        PdfGenerator pdfGenerator = new PdfGenerator();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        pdfGenerator.generateOrderPdf(outputStream, order, orderItems);
+
+        byte[] pdfContent = outputStream.toByteArray();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "Order_" + orderId + ".pdf");
+
+        return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 }

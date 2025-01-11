@@ -91,7 +91,13 @@
 </table>
 
 <a th:href="@{/orders/see-all}">Back to Orders</a>
+        <br>
 <a th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">Add Product</a>
+        <br>
+        <a th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}" class="btn btn-primary">
+            Download PDF
+        </a>
+
     </div>
     </div>
 </body>

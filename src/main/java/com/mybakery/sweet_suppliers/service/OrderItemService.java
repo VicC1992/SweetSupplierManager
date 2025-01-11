@@ -10,6 +10,8 @@ import com.mybakery.sweet_suppliers.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class OrderItemService {
@@ -36,6 +38,10 @@ public class OrderItemService {
         orderItem.setUnitOfMeasure(unitOfMeasure);
 
         return orderItemRepository.save(orderItem);
+    }
+
+    public List<OrderItem> getOrderItemsByOrderId(Long orderId) {
+        return orderItemRepository.findByOrderId(orderId);
     }
 
     public void removeOrderItem(Long orderItemId) {
