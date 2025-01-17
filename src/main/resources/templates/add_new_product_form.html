@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="ISO-8859-1">
     <title>Add Supplier</title>
@@ -9,33 +8,41 @@
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
-
 <body>
 <div class="container text-center">
     <h1>Add Product for Supplier</h1>
     <form th:action="@{/products/add/{supplierId}(supplierId=${supplierId})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
-        <!-- camp ascuns pentru ID-ul furnizorului -->
+        <!-- Product Id (hiddden) -->
         <input type="hidden" th:field="*{supplier.id}" />
-        <!-- camp pentru NUMELE produsului -->
-        <label class="form-label">Product Name:</label>
-        <input type="text" th:field="*{product.name}" class="form-control" required placeholder="Enter product name">
-        <!-- camp pentru PRETUL produsului -->
-        <label class="form-label">Price:</label>
-        <input type="number" th:field="*{price}" step="0.01" class="form-control" required>
-        <!-- camp pentru UNITATEA DE MASURA a produsului -->
-        <label class="form-label">Unit of Measure:</label>
-        <select th:field="*{unitOfMeasure}" class="form-control">
-            <option th:each="unit : ${unitsOfMeasure}" th:value="${unit}" th:text="${unit}"></option>
-        </select>
-        <!-- camp pentru CARACTERISTICILE produsului -->
-        <label class="form-label">Description:</label>
-        <textarea th:field="*{productDescription}" class="form-control"></textarea>
-        <!-- camp pentru NON-CONFORMITATILE produsului -->
-        <label class="form-label">Non-Conformities:</label>
-        <textarea th:field="*{nonConformities}" class="form-control"></textarea>
-
-        <!-- camp pentru STATUSUL produsului -->
+        <!-- Product Name -->
+        <div class="form-group">
+            <label class="form-label">Product Name:</label>
+            <input type="text" th:field="*{product.name}" class="form-control" required placeholder="Enter product name">
+        </div>
+        <!-- Product Price -->
+        <div class="form-group">
+            <label class="form-label">Price:</label>
+            <input type="number" th:field="*{price}" step="0.01" class="form-control" required>
+        </div>
+        <!-- Product Unit of Measure -->
+        <div class="form-group">
+            <label class="form-label">Unit of Measure:</label>
+            <select th:field="*{unitOfMeasure}" class="form-control">
+                <option th:each="unit : ${unitsOfMeasure}" th:value="${unit}" th:text="${unit}"></option>
+            </select>
+        </div>
+        <!-- Product Description -->
+        <div class="form-group">
+            <label class="form-label">Description:</label>
+            <textarea th:field="*{productDescription}" class="form-control"></textarea>
+        </div>
+        <!-- Product Non Conformities -->
+        <div class="form-group">
+            <label class="form-label">Non-Conformities:</label>
+            <textarea th:field="*{nonConformities}" class="form-control"></textarea>
+        </div>
+        <!-- Product Status -->
         <label class="form-label">Product Status:</label><br>
         <div class="form-check form-check-inline">
             <input type="radio" th:field="*{productStatus}" value="Activ" id="status_activ" class="form-check-input">
@@ -48,10 +55,10 @@
         <div class="form-check form-check-inline">
             <input type="radio" th:field="*{productStatus}" value="Test" id="status_probe" class="form-check-input">
             <label for="status_probe" class="form-check-label status-label status-probe">Test</label>
-        </div><br>
+        </div>
+        <br>
         <button type="submit" class="btn btn-primary mt-3">Add Product</button>
     </form>
 </div>
 </body>
-
 </html>

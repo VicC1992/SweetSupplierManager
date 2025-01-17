@@ -18,7 +18,7 @@ public class PdfGenerator {
             PdfWriter.getInstance(document, outputStream);
             document.open();
 
-            //titlu
+            //title
             Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
             Paragraph title = new Paragraph("Orders Details", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);

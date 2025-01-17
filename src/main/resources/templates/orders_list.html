@@ -7,34 +7,29 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/order_list.css">
 </head>
 
 <body>
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample08" aria-controls="navbarsExample08" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
+            <a class="navbar-brand" th:href="@{/home-page}">
+                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
+                SweetSupplierManager
+            </a>
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-
-                <span class="navbar-text text-white" th:text="'Welcome ' + ${#authentication.principal.firstName}"></span>
-
-                <ul class="navbar-nav">
+                <ul class="navbar-nav custom-margin">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/create}">Create New Order</a>
+                        <a class="nav-link" th:href="@{/orders/create}">Create new order</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/add}">Add new supplier</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" >Home page</a>
+                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                 </ul>
 
                 <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button type="submit" class="btn btn-warning">Sign Out</button>
+                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
                 </form>
             </div>
         </div>
@@ -60,7 +55,7 @@
                 <td th:text="${order.name}"></td>
                 <td th:text="${order.status}"></td>
             <td>
-            <a th:href="@{/orders/{orderId}/details(orderId=${order.id})}">View Details</a>
+            <a th:href="@{/orders/{orderId}/details(orderId=${order.id})}" class="btn btn-info">See order</a>
             </td>
             </tr>
             </tbody>

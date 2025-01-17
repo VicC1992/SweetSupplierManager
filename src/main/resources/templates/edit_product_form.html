@@ -15,29 +15,29 @@
     <h1>Edit Product</h1>
     <form th:action="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplierId}, supplierProductId=${supplierProduct.id})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
-        <!-- Camp ascuns pentru ID-ul produsului -->
+        <!-- Product Id (hidden) -->
         <input type="hidden" th:field="*{product.id}" />
-        <!-- Camp ascuns pentru ID-ul furnizorului -->
+        <!-- Supplier ID (hidden) -->
         <input type="hidden" th:field="*{supplier.id}" />
-        <!-- Camp pentru NUMELE produsului -->
+        <!-- Product Name -->
         <label class="form-label">Product Name:</label>
         <input type="text" th:field="*{product.name}" class="form-control" required>
-        <!-- Camp pentru PRETUL produsului -->
+        <!-- Product Price -->
         <label class="form-label">Price:</label>
         <input type="number" th:field="*{price}" step="0.01" class="form-control" required>
-        <!-- Camp pentru UNITATEA DE MASURA a produsului -->
+        <!-- Product Unit of Measure -->
         <label class="form-label">Unit of Measure:</label>
         <select th:field="*{unitOfMeasure}" class="form-control">
             <option th:each="unit : ${unitsOfMeasure}" th:value="${unit}" th:text="${unit}"></option>
         </select>
-        <!-- Camp pentru CARACTERISTICILE produsului -->
+        <!-- Product Description -->
         <label class="form-label">Description:</label>
         <textarea th:field="*{productDescription}" class="form-control"></textarea>
-        <!-- Camp pentru NON-CONFORMITATILE produsului -->
+        <!-- Product Non-Conformities -->
         <label class="form-label">Non-Conformities:</label>
         <textarea th:field="*{nonConformities}" class="form-control"></textarea>
 
-        <!-- Camp pentru STATUSUL produsului -->
+        <!-- Product Status -->
         <label class="form-label">Product Status:</label><br>
         <div class="form-check form-check-inline">
             <input type="radio" th:field="*{productStatus}" value="Activ" id="status_activ" class="form-check-input">

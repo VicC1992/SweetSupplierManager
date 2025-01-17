@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>List Users</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+</head>
+
+<body>
+<div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/home-page}">
+                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45">
+            </a>
+            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
+                <span class="navbar-text text-white" th:text="'Welcome ' + ${#authentication.principal.lastName}"></span>
+                <p class="navbar-title">SweetSupplierManager</p>
+                <form th:action="@{/logout}" method="post" class="d-flex">
+                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="wheel-container">
+    <div class="wheel">
+        <a href="/suppliers/list">Suppliers List</a>
+    </div>
+    <div class="wheel">
+        <a href="/orders/see-all">Orders</a>
+    </div>
+    <div class="wheel">
+        <a href="/orders/create">Create an Order</a>
+    </div>
+    <div class="wheel">
+        <a href="/products/see-all">Products List</a>
+    </div>
+    <div class="wheel">
+        <a href="/reports">Orders History</a>
+    </div>
+    <div class="wheel">
+        <a href="/suppliers/add">Add new Supplier</a>
+    </div>
+    <div class="wheel">
+        <a href="/settings">Out-of-Stock Notifictaion</a>
+    </div>
+    <div class="wheel">
+        <a href="/settings">Orders-to-Receive</a>
+    </div>
+    <div class="wheel">
+        <a href="/settings">Orders-to-Return</a>
+    </div>
+</div>
+</body>
+
+</html>

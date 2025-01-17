@@ -10,8 +10,8 @@ public class AppController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("")
+    @GetMapping("/home-page")
     public String viewHomePage() {
-        return "home";
+        return "home_page";
     }
 }

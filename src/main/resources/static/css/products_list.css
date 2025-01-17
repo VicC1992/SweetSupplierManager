@@ -17,3 +17,7 @@
     background-color: yellow;
     color: black;
 }
+
+.custom-margin {
+    margin-left: 300px;
+}

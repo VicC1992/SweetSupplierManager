@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="ISO-8859-1">
     <title>Add Supplier</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/add_supplier.css">
 </head>
-
 <body>
 <div class="container text-center">
     <h1>Add New Supplier</h1>
     <form th:action="@{/suppliers/add}" th:object="${supplier}" method="post" style="max-width: 600px; margin: 0 auto;">
-        <label class="col-4 col-form-label"> Name:</label>
-        <input type="text" th:field="*{name}" class="form-control" required><br>
-
-        <label class="col-4 col-form-label">Registration Code:</label>
-        <input type="text" th:field="*{RegistrationUniqueCode}" class="form-control" required><br>
-
-        <label class="col-4 col-form-label">Contact Person:</label>
-        <input type="text" th:field="*{contactPerson}" class="form-control" required><br>
-
-        <label class="col-4 col-form-label">Phone Number:</label>
-        <input type="text" th:field="*{phoneNumber}" class="form-control" required><br>
-
-        <label class="col-4 col-form-label">Delivery Days (comma-separated):</label>
-        <input type="text" th:field="*{deliveryDays}" placeholder="Monday,Tuesday,..." class="form-control" required><br>
-
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" th:field="*{name}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="reg-code">Registration Code:</label>
+            <input type="text" id="reg-code" th:field="*{RegistrationUniqueCode}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="contact-person">Contact Person:</label>
+            <input type="text" id="contact-person" th:field="*{contactPerson}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="phone-number">Phone Number:</label>
+            <input type="text" id="phone-number" th:field="*{phoneNumber}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="delivery-days">Delivery Days (comma-separated):</label>
+            <input type="text" id="delivery-days" th:field="*{deliveryDays}" placeholder="Monday,Tuesday,..." class="form-control" required>
+        </div>
         <button type="submit" class="btn btn-primary mt-3">Add Supplier</button>
     </form>
 </div>
 </body>
-
 </html>

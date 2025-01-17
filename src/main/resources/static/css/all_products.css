@@ -1,0 +1,20 @@
+.status-active {
+  color: white;
+  background-color: green;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.status-inactive {
+  color: white;
+  background-color: red;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.status-probe {
+  color: black;
+  background-color: yellow;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

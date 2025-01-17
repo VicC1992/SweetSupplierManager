@@ -6,6 +6,7 @@ import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.OrderItem;
 import com.mybakery.sweet_suppliers.entity.SupplierProduct;
 import com.mybakery.sweet_suppliers.repository.OrderItemRepository;
+import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
 import com.mybakery.sweet_suppliers.service.OrderItemService;
 import com.mybakery.sweet_suppliers.service.OrderService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
@@ -34,6 +35,9 @@ public class OrderController {
 
     @Autowired
     private SupplierProductService supplierProductService;
+
+    @Autowired
+    private SupplierProductRepository supplierProductRepository;
 
     @Autowired
     private OrderItemRepository orderItemRepository;
@@ -94,8 +98,9 @@ public class OrderController {
     public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long productId) {
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(()-> new IllegalArgumentException("Order not found with Id:" + orderId));
-        SupplierProduct supplierProduct = supplierProductService.findById(productId)
+        SupplierProduct supplierProduct = supplierProductRepository.findByProductId(productId)
                 .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + productId));
+
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(supplierProduct.getProduct());

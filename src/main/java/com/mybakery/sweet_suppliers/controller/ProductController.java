@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.controller;
 
+import com.mybakery.sweet_suppliers.Enums.ProductStatus;
 import com.mybakery.sweet_suppliers.Enums.UnitOfMeasure;
 import com.mybakery.sweet_suppliers.entity.Product;
 import com.mybakery.sweet_suppliers.entity.Supplier;
@@ -106,4 +107,25 @@ public class ProductController {
         supplierProductService.deleteById(supplierProductId);
         return "redirect:/products/list/" + supplierId;
     }
+
+    @GetMapping("/see-all")
+    public String getAllProducts(Model model) {
+        List<SupplierProduct> supplierProducts = productService.getAllProductsOrderedByName();
+        model.addAttribute("supplierProducts", supplierProducts);
+        model.addAttribute("productStatuses", ProductStatus.values());
+        return "all_products_list";
+    }
+
+    @PostMapping("/change-status/{supplierProductId}")
+    public String changeProductStatus(@PathVariable Long supplierProductId,
+                                      @RequestParam("productStatus") ProductStatus productStatus) {
+        SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
+                .orElseThrow(()-> new IllegalArgumentException("Invalid supplier product:"));
+        if (supplierProduct != null) {
+            supplierProduct.setProductStatus(productStatus);
+            supplierProductService.save(supplierProduct);
+        }
+        return "redirect:/products/see-all";
+    }
+
 }

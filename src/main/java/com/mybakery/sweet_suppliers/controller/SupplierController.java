@@ -60,12 +60,12 @@ public class SupplierController {
         existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
         existingSupplier.setDeliveryDays(new ArrayList<>(Arrays.asList(deliveryDays.split(","))));
         supplierService.updateSupplier(existingSupplier);
-        return "redirect:/suppliers";
+        return "redirect:/suppliers/list";
     }
 
     @PostMapping("/delete/{id}")
     public String deleteSupplier(@PathVariable Long id) {
         supplierService.deleteById(id);
-        return "redirect:/suppliers";
+        return "redirect:/suppliers/list";
     }
 }
