@@ -10,8 +10,13 @@ public class AppController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/home-page")
+    @GetMapping("")
     public String viewHomePage() {
-        return "home_page";
+        return "home";
+    }
+
+    @GetMapping("/home-page")
+    public String viewFirstPage() {
+        return "manager_home_page";
     }
 }
