@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.controller;
 
+import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 import com.mybakery.sweet_suppliers.dto.OrderItemRequest;
 import com.mybakery.sweet_suppliers.dto.OrderRequest;
 import com.mybakery.sweet_suppliers.entity.Order;
@@ -45,11 +46,13 @@ public class OrderController {
     @GetMapping("/create")
     public String showCreateOrderForm(Model model) {
         model.addAttribute("order", new OrderRequest());
+        model.addAttribute("orderStatuses", OrderStatus.values());
         return "create_order_form";
     }
 
     @PostMapping("/create")
-    public String createOrder(@ModelAttribute OrderRequest orderRequest){
+    public String createOrder(@ModelAttribute OrderRequest orderRequest) {
+        //OrderStatus status = OrderStatus.valueOf(orderRequest.getStatus());
         orderService.createOrder(orderRequest.getName(), orderRequest.getStatus());
         return "redirect:/orders/see-all";
     }

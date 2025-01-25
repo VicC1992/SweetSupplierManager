@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.service;
 
+import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.OrderItem;
 import com.mybakery.sweet_suppliers.entity.Product;
@@ -28,7 +29,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
-    public Order createOrder(String name, String status) {
+    public Order createOrder(String name, OrderStatus status) {
         Order order = new Order();
         order.setName(name);
         order.setStatus(status);

@@ -1,8 +1,10 @@
 package com.mybakery.sweet_suppliers.dto;
 
+import com.mybakery.sweet_suppliers.Enums.OrderStatus;
+
 public class OrderRequest {
     private String name;
-    private String status;
+    private OrderStatus status;
 
     public String getName() {
         return name;
@@ -12,11 +14,11 @@ public class OrderRequest {
         this.name = name;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 }

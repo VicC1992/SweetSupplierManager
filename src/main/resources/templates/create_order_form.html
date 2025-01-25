@@ -12,21 +12,24 @@
 
 <body>
 <div class="container text-center">
-<h1>Create a New Order</h1>
-<form th:action="@{/orders/create}" th:object="${order}" method="post">
-    <div class="form-group">
-    <label for="name">Order Name:</label>
-    <input type="text" id="name" th:field="*{name}" required>
-    </div>
-    <br>
-    <div class="form-group">
-    <label for="status">Status:</label>
-    <input type="text" id="status" th:field="*{status}" required>
-    </div>
-    <br>
+    <h1>Create a New Order</h1>
+    <form th:action="@{/orders/create}" th:object="${order}" method="post">
+        <div class="form-group">
+            <label for="name">Order Name:</label>
+            <input type="text" id="name" th:field="*{name}" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select id="status" th:field="*{status}" class="form-control">
+                <option value="" disabled selected>Select a status</option>
+                <option th:each="status : ${orderStatuses}" th:value="${status}" th:text="${status}"></option>
+            </select>
+        </div>
+        <br>
 
-    <button type="submit" class="btn btn-primary mt-3">Create Order</button>
-</form>
+        <button type="submit" class="btn btn-primary mt-3">Create Order</button>
+    </form>
 </div>
 </body>
 
