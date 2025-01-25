@@ -10,6 +10,7 @@ import com.mybakery.sweet_suppliers.service.ProductService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
 import com.mybakery.sweet_suppliers.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +48,7 @@ public class ProductController {
         model.addAttribute("supplierProduct", new SupplierProduct());
         model.addAttribute("products", productService.findAll());
         model.addAttribute("unitsOfMeasure", UnitOfMeasure.values());
+        model.addAttribute("productStatuses", ProductStatus.values());
         return "add_new_product_form";
     }
 
@@ -83,6 +85,7 @@ public class ProductController {
             model.addAttribute("supplier", supplier);
             model.addAttribute("supplierProductId", supplierProductId);
             model.addAttribute("unitsOfMeasure", UnitOfMeasure.values());
+            model.addAttribute("productStatuses", ProductStatus.values());
             return "edit_product_form";
     }
 

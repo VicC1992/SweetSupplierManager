@@ -10,53 +10,36 @@
 </head>
 <body>
 <div class="container text-center">
-    <h1>Add Product for Supplier</h1>
+    <h2>Add Product for Supplier</h2>
     <form th:action="@{/products/add/{supplierId}(supplierId=${supplierId})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
         <!-- Product Id (hiddden) -->
         <input type="hidden" th:field="*{supplier.id}" />
         <!-- Product Name -->
-        <div class="form-group">
-            <label class="form-label">Product Name:</label>
-            <input type="text" th:field="*{product.name}" class="form-control" required placeholder="Enter product name">
-        </div>
+        <label class="form-label">Product Name:</label>
+        <input type="text" th:field="*{product.name}" class="form-control" required>
         <!-- Product Price -->
-        <div class="form-group">
-            <label class="form-label">Price:</label>
-            <input type="number" th:field="*{price}" step="0.01" class="form-control" required>
-        </div>
+        <label class="form-label">Price:</label>
+        <input type="number" th:field="*{price}" step="0.01" class="form-control" required>
         <!-- Product Unit of Measure -->
+        <label class="form-label">Unit of Measure:</label>
+        <select th:field="*{unitOfMeasure}" class="form-control">
+            <option th:each="unit : ${unitsOfMeasure}" th:value="${unit}" th:text="${unit}"></option>
+        </select>
+        <!-- Product Description -->
+        <label class="form-label">Description:</label>
+        <textarea th:field="*{productDescription}" class="form-control"></textarea>
+        <!-- Product Non Conformities -->
+        <label class="form-label">Non-Conformities:</label>
+        <textarea th:field="*{nonConformities}" class="form-control"></textarea>
+        <!-- Product Status -->
         <div class="form-group">
-            <label class="form-label">Unit of Measure:</label>
-            <select th:field="*{unitOfMeasure}" class="form-control">
-                <option th:each="unit : ${unitsOfMeasure}" th:value="${unit}" th:text="${unit}"></option>
+            <label class="form-label">Product Status:</label><br>
+            <select id="status" th:field="*{productStatus}" class="form-control">
+                <option value="" disabled selected>Select a status</option>
+                <option th:each="productStatus : ${productStatuses}" th:value ="${productStatus}" th:text="${productStatus}"></option>
             </select>
         </div>
-        <!-- Product Description -->
-        <div class="form-group">
-            <label class="form-label">Description:</label>
-            <textarea th:field="*{productDescription}" class="form-control"></textarea>
-        </div>
-        <!-- Product Non Conformities -->
-        <div class="form-group">
-            <label class="form-label">Non-Conformities:</label>
-            <textarea th:field="*{nonConformities}" class="form-control"></textarea>
-        </div>
-        <!-- Product Status -->
-        <label class="form-label">Product Status:</label><br>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Activ" id="status_activ" class="form-check-input">
-            <label for="status_activ" class="form-check-label status-label status-active">Activ</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Inactiv" id="status_inactiv" class="form-check-input">
-            <label for="status_inactiv" class="form-check-label status-label status-inactive">Inactiv</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Test" id="status_probe" class="form-check-input">
-            <label for="status_probe" class="form-check-label status-label status-probe">Test</label>
-        </div>
-        <br>
         <button type="submit" class="btn btn-primary mt-3">Add Product</button>
     </form>
 </div>

@@ -52,7 +52,6 @@ public class OrderController {
 
     @PostMapping("/create")
     public String createOrder(@ModelAttribute OrderRequest orderRequest) {
-        //OrderStatus status = OrderStatus.valueOf(orderRequest.getStatus());
         orderService.createOrder(orderRequest.getName(), orderRequest.getStatus());
         return "redirect:/orders/see-all";
     }

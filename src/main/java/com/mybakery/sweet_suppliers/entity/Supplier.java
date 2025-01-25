@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.entity;
 
+import com.mybakery.sweet_suppliers.Enums.DeliveryDays;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,8 +25,14 @@ public class Supplier {
     @Column(unique = true)
     private String phoneNumber;
 
-    @ElementCollection
-    private List<String> deliveryDays = new ArrayList<>();
+    @ElementCollection(targetClass = DeliveryDays.class)
+    @CollectionTable(
+            name = "supplier_delivery_days",
+            joinColumns = @JoinColumn(name = "supplier_id")
+    )
+    @Column(name = "delivery_day")
+    @Enumerated(EnumType.STRING)
+    private List<DeliveryDays> deliveryDays = new ArrayList<>();
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SupplierProduct> supplierProducts = new ArrayList<>();
@@ -73,16 +80,11 @@ public class Supplier {
         this.phoneNumber = phoneNumber;
     }
 
-    public List<String> getDeliveryDays() {
-        return new ArrayList<>(deliveryDays);
+    public List<DeliveryDays> getDeliveryDays() {
+        return deliveryDays;
     }
 
-    public void setDeliveryDays(List<String> deliveryDays) {
-        for (String day : deliveryDays) {
-            if (!day.matches("Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday")) {
-                throw new IllegalArgumentException("Invalide day:" + day);
-            }
-        }
+    public void setDeliveryDays(List<DeliveryDays> deliveryDays) {
         this.deliveryDays = deliveryDays;
     }
 

@@ -60,24 +60,15 @@
     <td th:text="${supplierProduct.supplier.name}"></td>
     <td>
       <form th:action="@{/products/change-status/{supplierProductId}(supplierProductId=${supplierProduct.id})}" method="post">
-        <div class="form-check form-check-inline">
-          <input type="radio" name="productStatus" th:value="Activ"
-                 th:checked="${supplierProduct.productStatus.name() == 'Activ'}"
-                 id="status_activ_${supplierProduct.id}" class="form-check-input">
-          <label th:for="'status_activ_' + ${supplierProduct.id}" class="form-check-label status-label status-active">Activ</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input type="radio" name="productStatus" th:value="Inactiv"
-                 th:checked="${supplierProduct.productStatus.name() == 'Inactiv'}"
-                 id="status_inactiv_${supplierProduct.id}" class="form-check-input">
-          <label th:for="'status_inactiv_' + ${supplierProduct.id}" class="form-check-label status-label status-inactive">Inactiv</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input type="radio" name="productStatus" th:value="Test"
-                 th:checked="${supplierProduct.productStatus.name() == 'Test'}"
-                 id="status_probe_${supplierProduct.id}" class="form-check-input">
-          <label th:for="'status_probe_' + ${supplierProduct.id}" class="form-check-label status-label status-probe">Test</label>
-        </div>
+        <select name="productStatus" class="form-control">
+          <option th:each="productStatus : ${productStatuses}"
+                  th:value ="${productStatus}"
+                  th:text="${productStatus}"
+                  th:selected="${productStatus.name() == supplierProduct.productStatus.name()}"
+                  data-status="${productStatus.name()}">
+
+          </option>
+        </select>
         <button type="submit" class="btn btn-primary btn-sm mt-2">Change</button>
       </form>
     </td>
@@ -86,7 +77,7 @@
 </table>
   </div>
 </div>
-
+  <script th:src="@{/js/all_products.js}"></script>
 </body>
 
 </html>

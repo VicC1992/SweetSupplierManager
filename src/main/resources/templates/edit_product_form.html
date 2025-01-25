@@ -12,7 +12,7 @@
 
 <body>
 <div class="container text-center">
-    <h1>Edit Product</h1>
+    <h2>Edit Product</h2>
     <form th:action="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplierId}, supplierProductId=${supplierProduct.id})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
         <!-- Product Id (hidden) -->
@@ -38,19 +38,13 @@
         <textarea th:field="*{nonConformities}" class="form-control"></textarea>
 
         <!-- Product Status -->
-        <label class="form-label">Product Status:</label><br>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Activ" id="status_activ" class="form-check-input">
-            <label for="status_activ" class="form-check-label status-label status-active">Activ</label>
+        <div class="form-group">
+            <label class="form-label">Product Status:</label><br>
+            <select id="status" th:field="*{productStatus}" class="form-control">
+                <option value="" disabled selected>Select a status</option>
+                <option th:each="productStatus : ${productStatuses}" th:value ="${productStatus}" th:text="${productStatus}"></option>
+            </select>
         </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Inactiv" id="status_inactiv" class="form-check-input">
-            <label for="status_inactiv" class="form-check-label status-label status-inactive">Inactiv</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input type="radio" th:field="*{productStatus}" value="Test" id="status_probe" class="form-check-input">
-            <label for="status_probe" class="form-check-label status-label status-probe">Test</label>
-        </div><br>
         <button type="submit" class="btn btn-primary mt-3">Save Changes</button>
     </form>
 </div>

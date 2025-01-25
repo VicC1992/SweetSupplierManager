@@ -1,15 +1,13 @@
 package com.mybakery.sweet_suppliers.controller;
 
+import com.mybakery.sweet_suppliers.Enums.DeliveryDays;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import com.mybakery.sweet_suppliers.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +36,8 @@ public class SupplierController {
     }
 
     @PostMapping("/add")
-    public String addSupplier(Supplier supplier, String deliveryDays) {
-        supplier.setDeliveryDays(Arrays.asList(deliveryDays.split(",")));
+    public String addSupplier(Supplier supplier, @RequestParam List<DeliveryDays> deliveryDays) {
+        supplier.setDeliveryDays(deliveryDays);
         supplierService.addSupplier(supplier);
         return "redirect:/suppliers/list";
     }
@@ -52,13 +50,13 @@ public class SupplierController {
     }
 
     @PostMapping("/edit/{id}")
-    public String updateSupplier(@PathVariable Long id, Supplier supplier, String deliveryDays) {
+    public String updateSupplier(@PathVariable Long id,@ModelAttribute Supplier supplier) {
         Supplier existingSupplier = supplierService.findById(id);
         existingSupplier.setName(supplier.getName());
         existingSupplier.setRegistrationUniqueCode(supplier.getRegistrationUniqueCode());
         existingSupplier.setContactPerson(supplier.getContactPerson());
         existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
-        existingSupplier.setDeliveryDays(new ArrayList<>(Arrays.asList(deliveryDays.split(","))));
+        existingSupplier.setDeliveryDays(supplier.getDeliveryDays());
         supplierService.updateSupplier(existingSupplier);
         return "redirect:/suppliers/list";
     }
