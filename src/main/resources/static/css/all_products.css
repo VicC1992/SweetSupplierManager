@@ -1,14 +1,19 @@
 .option-active {
-  background-color: #d4edda;
-  color: #155724;
+	background-color: #d4edda;
+	color: #155724;
 }
 
 .option-inactive {
-  background-color: #f8d7da;
-  color: #721c24;
+	background-color: #f8d7da;
+	color: #721c24;
 }
 
 .option-pending {
-  background-color: #fff3cd;
-  color: #856404;
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.dropdown-auto-width {
+	width: auto;
+	display: inline-block;
 }

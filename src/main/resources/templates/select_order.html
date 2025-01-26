@@ -21,8 +21,8 @@
     </thead>
     <tbody>
     <tr th:each="order : ${orders}">
-        <td th:text="${order.id}">Order ID</td> <!-- Afi?eaz? ID-ul comenzii -->
-        <td th:text="${order.name}">Order Name</td> <!-- Numele comenzii -->
+        <td th:text="${order.id}">Order ID</td>
+        <td th:text="${order.name}">Order Name</td>
         <td>
             <form th:action="@{/orders/{orderId}/add-product-direct/{productId}(orderId=${order.id}, productId=${productId})}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />

@@ -1,23 +1,23 @@
 .status-label {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    color: white;
+	padding: 5px 10px;
+	border-radius: 5px;
+	font-weight: bold;
+	color: white;
 }
 
 .status-label.Activ {
-    background-color: green;
+	background-color: green;
 }
 
 .status-label.Inactiv {
-    background-color: red;
+	background-color: red;
 }
 
 .status-label.Test {
-    background-color: yellow;
-    color: black;
+	background-color: yellow;
+	color: black;
 }
 
 .custom-margin {
-    margin-left: 300px;
+	margin-left: 300px;
 }

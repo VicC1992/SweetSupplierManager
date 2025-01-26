@@ -1,6 +1,27 @@
 .custom-margin {
-    margin-left: 400px;
+	margin-left: 400px;
 }
+
 .btn-spacing {
-    margin-right: 10px;
+	margin-right: 10px;
+}
+
+.dropdown-auto-width {
+	width: auto;
+	display: inline-block;
+}
+
+.dropdown-green {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.dropdown-yellow {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.dropdown-red {
+	background-color: #f8d7da;
+	color: #721c24;
 }

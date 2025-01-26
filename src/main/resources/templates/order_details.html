@@ -44,7 +44,23 @@
     <br>
         <div>
             <p><strong>Order Name:</strong> <span th:text="${order.name}"></span></p>
-            <p><strong>Status:</strong> <span th:text="${order.status}"></span></p>
+            <div>
+                <p><strong>Status:</strong></p>
+                <form th:action="@{/orders/{orderId}/update-status(orderId=${order.id})}" method="post">
+                    <select name="status" class="form-control dropdown-auto-width"
+                    id="statusDropdown" onchange="updateDropdownColor(this)">
+                        <option th:each="status : ${orderStatuses}"
+                                th:value ="${status}"
+                                th:text="${status}"
+                                th:classappend="${status == 'InProcess' ? 'option-green' :
+                                                  status == 'ToReceive' ? 'option-yellow' :
+                                                  status == 'Received' ? 'option-red' : ''}"
+                                th:selected="${status.name() == order.status.name()}">
+                        </option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Change</button>
+                </form>
+            </div>
         </div>
         <br>
     <div class="d-flex justify-content-end mb-3">
@@ -92,6 +108,6 @@
 </table>
     </div>
     </div>
+<script th:src="@{/js/order_details.js}"></script>
 </body>
-
 </html>

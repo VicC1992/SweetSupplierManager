@@ -126,7 +126,18 @@ public class OrderController {
 
         model.addAttribute("order", order);
         model.addAttribute("orderItems", order.getOrderItems());
+        model.addAttribute("orderStatuses", OrderStatus.values());
         return "order_details";
+    }
+
+    @PostMapping("/{orderId}/update-status")
+    public String updateOrderStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(()-> new IllegalArgumentException("Order not found with ID:" + orderId));
+        order.setStatus(status);
+        orderService.saveOrder(order);
+        //redirectAttributes.addFlashAttribute("succesMessage", "Order status updated successfull");
+        return "redirect:/orders/{orderId}/details";
     }
 
     @PostMapping("/{orderId}/update-quantity/{itemId}")

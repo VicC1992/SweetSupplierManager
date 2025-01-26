@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/styles.css">
+    <link rel="stylesheet" type="text/css" href="/css/create_order.css">
 </head>
 
 <body>
@@ -21,7 +21,7 @@
         <br>
         <div class="form-group">
             <label for="status">Status:</label>
-            <select id="status" th:field="*{status}" class="form-control">
+            <select id="status" th:field="*{status}" class="form-control dropdown-auto-width">
                 <option value="" disabled selected>Select a status</option>
                 <option th:each="status : ${orderStatuses}" th:value="${status}" th:text="${status}"></option>
             </select>
