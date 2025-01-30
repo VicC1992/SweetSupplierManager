@@ -19,7 +19,7 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
                 <ul class="navbar-nav custom-margin">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/add}">Add new supplier</a>
+                        <a class="nav-link" th:href="@{/suppliers/add-edit-form}">Add new supplier</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/orders/see-all}">Orders</a>
@@ -58,7 +58,7 @@
                 <td th:text="${supplier.contactPerson}">Contact Person</td>
                 <td th:text="${supplier.phoneNumber}">Phone Number</td>
                 <td><a th:href="@{/products/list/{id}(id=${supplier.id})}" class="btn btn-info">See products</a></td>
-                <td><a th:href="@{/suppliers/edit/{id}(id = ${supplier.id})}" class="btn btn-warning">Edit</a></td>
+                <td><a th:href="@{/suppliers/add-edit-form(id = ${supplier.id})}" class="btn btn-warning">Edit</a></td>
                 <td>
                     <form th:action="@{/suppliers/delete/{id}(id=${supplier.id})}" method="post">
                         <button type="submit" class="btn btn-danger">Delete</button>

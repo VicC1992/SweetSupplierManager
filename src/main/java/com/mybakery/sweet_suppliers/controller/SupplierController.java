@@ -66,4 +66,30 @@ public class SupplierController {
         supplierService.deleteById(id);
         return "redirect:/suppliers/list";
     }
+
+    ///////
+
+    @GetMapping("/add-edit-form")
+    public String showSupplierForm(@RequestParam(required = false) Long id, Model model) {
+        Supplier supplier = (id != null) ? supplierService.findById(id) : new Supplier();
+        model.addAttribute("supplier", supplier);
+        return "add_edit_supplier";
+    }
+
+    @PostMapping("/save-edit")
+    public String addEditSupplier(@ModelAttribute Supplier supplier, @RequestParam List<DeliveryDays> deliveryDays) {
+        if (supplier.getId() != null) {
+            Supplier existingSupplier = supplierService.findById(supplier.getId());
+            existingSupplier.setName(supplier.getName());
+            existingSupplier.setRegistrationUniqueCode(supplier.getRegistrationUniqueCode());
+            existingSupplier.setContactPerson(supplier.getContactPerson());
+            existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
+            existingSupplier.setDeliveryDays(supplier.getDeliveryDays());
+            supplierService.updateSupplier(existingSupplier);
+        } else {
+            supplier.setDeliveryDays(deliveryDays);
+            supplierService.addSupplier(supplier);
+        }
+        return "redirect:/suppliers/list";
+    }
 }
