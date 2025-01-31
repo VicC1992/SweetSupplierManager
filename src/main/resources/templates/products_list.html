@@ -24,7 +24,7 @@
                         <a class="nav-link"th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link"th:href="@{/products/add/{supplierId}(supplierId=${supplier.id})}">Add new product</a>
+                        <a class="nav-link"th:href="@{/products/create-edit-form/{supplierId}(supplierId=${supplier.id})}">Add new product</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/orders/see-all}">Orders</a>
@@ -68,7 +68,7 @@
             <td th:text="${product.productDescription}">Description</td>
             <td th:text="${product.nonConformities}">Non-Conformities</td>
             <td>
-                <a th:href="@{/products/edit/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
+                <a th:href="@{/products/create-edit-form/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" class="btn btn-warning">Edit</a></td>
             <td>
                 <form th:action="@{/products/delete/{supplierId}/{supplierProductId}(supplierId=${supplier.id}, supplierProductId=${product.id})}" method="post">
                     <button type="submit" class="btn btn-danger">Delete</button>

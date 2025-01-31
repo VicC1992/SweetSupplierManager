@@ -41,58 +41,25 @@ public class ProductController {
         return "products_list";
     }
 
-    @GetMapping("/add/{supplierId}")
-    public String showAddProductForm(@PathVariable Long supplierId, Model model) {
+    @GetMapping({"/create-edit-form/{supplierId}", "/create-edit-form/{supplierId}/{supplierProductId}"})
+    public String showProductForm(@PathVariable(required = false) Long supplierProductId,@PathVariable Long supplierId, Model model) {
         Supplier supplier = supplierService.findById(supplierId);
+        SupplierProduct supplierProduct = (supplierProductId != null) ? supplierProductService.findById(supplierProductId)
+                .orElseThrow(()-> new IllegalArgumentException("Invalid product ID:" + supplierProductId))
+                :new SupplierProduct();
+        model.addAttribute("supplierProduct", supplierProduct);
         model.addAttribute("supplierId", supplierId);
-        model.addAttribute("supplierProduct", new SupplierProduct());
-        model.addAttribute("products", productService.findAll());
         model.addAttribute("unitsOfMeasure", UnitOfMeasure.values());
         model.addAttribute("productStatuses", ProductStatus.values());
-        return "add_new_product_form";
+        return "add_edit_product_form";
     }
 
-    @PostMapping("/add/{supplierId}")
-    public String addProductToSupplier(
-            @PathVariable Long supplierId,
-            @ModelAttribute SupplierProduct supplierProduct) {
-
+    @PostMapping("/save-edit/{supplierId}")
+    public String saveProduct(@PathVariable Long supplierId, @ModelAttribute SupplierProduct supplierProduct) {
         Supplier supplier = supplierService.findById(supplierId);
-
-        String productName = supplierProduct.getProduct().getName();
-        Product product = productService.findByName(productName)
-                .orElseGet(() -> {
-                    Product newProduct = new Product();
-                    newProduct.setName(productName);
-                    return productService.save(newProduct);
-                });
-
-        supplierProduct.setSupplier(supplier);
-        supplierProduct.setProduct(product);
-
-        supplier.getSupplierProducts().add(supplierProduct);
-        supplierService.saveSupplier(supplier);
-        return "redirect:/products/list/" + supplierId;
-    }
-
-    @GetMapping("/edit/{supplierId}/{supplierProductId}")
-    public String showEditProductForm(@PathVariable Long supplierId, @PathVariable Long supplierProductId, Model model) {
-        SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
-        Supplier supplier = supplierService.findById(supplierId);
-            model.addAttribute("supplierProduct", supplierProduct);
-            model.addAttribute("supplierId", supplierId);
-            model.addAttribute("supplier", supplier);
-            model.addAttribute("supplierProductId", supplierProductId);
-            model.addAttribute("unitsOfMeasure", UnitOfMeasure.values());
-            model.addAttribute("productStatuses", ProductStatus.values());
-            return "edit_product_form";
-    }
-
-    @PostMapping("/edit/{supplierId}/{supplierProductId}")
-    public String editProduct(@PathVariable Long supplierId, @PathVariable Long supplierProductId, @ModelAttribute SupplierProduct supplierProduct) {
-        SupplierProduct existingProduct = supplierProductService.findById(supplierProductId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProductId));
+        if (supplierProduct.getId() != null) {
+            SupplierProduct existingProduct = supplierProductService.findById(supplierProduct.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid supplier product ID:" + supplierProduct.getId()));
             existingProduct.setPrice(supplierProduct.getPrice());
             existingProduct.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
             existingProduct.setProductDescription(supplierProduct.getProductDescription());
@@ -100,7 +67,21 @@ public class ProductController {
             existingProduct.setProductStatus(supplierProduct.getProductStatus());
 
             supplierProductService.save(existingProduct);
-            return "redirect:/products/list/" + supplierId;
+        } else {
+            String productName = supplierProduct.getProduct().getName();
+            Product product = productService.findByName(productName)
+                    .orElseGet(()-> {
+                        Product newProduct = new Product();
+                        newProduct.setName(productName);
+                        return productService.save(newProduct);
+                    });
+            supplierProduct.setSupplier(supplier);
+            supplierProduct.setProduct(product);
+
+            supplier.getSupplierProducts().add(supplierProduct);
+            supplierService.saveSupplier(supplier);
+        }
+        return "redirect:/products/list/" + supplierId;
     }
 
     @PostMapping("/delete/{supplierId}/{supplierProductId}")

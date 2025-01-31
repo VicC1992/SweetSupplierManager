@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="ISO-8859-1">
-    <title>Add Supplier</title>
+    <title>Edit Product</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
+
 <body>
 <div class="container text-center">
-    <h2>Add Product for Supplier</h2>
-    <form th:action="@{/products/add/{supplierId}(supplierId=${supplierId})}"
+    <h2 th:text="${supplierProduct.id} ? 'Edit Product' : 'Add Product'"></h2>
+    <form th:action="@{/products/save-edit/{supplierId}(supplierId=${supplierId})}"
           th:object="${supplierProduct}" method="post" style="max-width: 600px; margin: 0 auto;">
-        <!-- Product Id (hiddden) -->
+        <!-- Product Id (hidden) -->
+        <input type="hidden" th:field="*{id}" />
+        <!-- Supplier ID (hidden) -->
         <input type="hidden" th:field="*{supplier.id}" />
         <!-- Product Name -->
         <label class="form-label">Product Name:</label>
@@ -29,9 +33,10 @@
         <!-- Product Description -->
         <label class="form-label">Description:</label>
         <textarea th:field="*{productDescription}" class="form-control"></textarea>
-        <!-- Product Non Conformities -->
+        <!-- Product Non-Conformities -->
         <label class="form-label">Non-Conformities:</label>
         <textarea th:field="*{nonConformities}" class="form-control"></textarea>
+
         <!-- Product Status -->
         <div class="form-group">
             <label class="form-label">Product Status:</label><br>
@@ -39,9 +44,10 @@
                 <option value="" disabled selected>Select a status</option>
                 <option th:each="productStatus : ${productStatuses}" th:value ="${productStatus}" th:text="${productStatus}"></option>
             </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Add Product</button>
+        </div><button type="submit" class="btn btn-primary mt-3"th:text="${supplierProduct.id} ? 'Save Changes' : 'Add Product'"></button>
+
     </form>
 </div>
 </body>
+
 </html>

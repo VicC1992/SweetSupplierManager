@@ -67,13 +67,11 @@ public class SupplierController {
         return "redirect:/suppliers/list";
     }
 
-    ///////
-
-    @GetMapping("/add-edit-form")
+    @GetMapping("/create-edit-form")
     public String showSupplierForm(@RequestParam(required = false) Long id, Model model) {
         Supplier supplier = (id != null) ? supplierService.findById(id) : new Supplier();
         model.addAttribute("supplier", supplier);
-        return "add_edit_supplier";
+        return "add_edit_supplier_form";
     }
 
     @PostMapping("/save-edit")
