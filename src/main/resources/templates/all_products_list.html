@@ -44,6 +44,17 @@
   </div>
   <br>
   <div>
+    <form th:action="@{/products/see-all}" method="get">
+      <label for="productFilter">Filter by Product:</label>
+      <select id="productFilter" name="productName" class="form-control dropdown-auto-width" onchange="this.form.submit()">
+        <option value="">All Products</option>
+        <option th:each="product : ${availableProducts}"
+                th:value="${product.name}"
+                th:text="${product.name}"
+                th:selected="${product.name == selectedProductName}">
+        </option>
+      </select>
+    </form>
 <table class="table table-striped table-bordered">
   <thead class="thead-dark">
   <tr>

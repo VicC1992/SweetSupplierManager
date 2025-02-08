@@ -93,10 +93,18 @@ public class ProductController {
     }
 
     @GetMapping("/see-all")
-    public String getAllProducts(Model model) {
-        List<SupplierProduct> supplierProducts = productService.getAllProductsOrderedByName();
+    public String getAllProducts(@RequestParam(value = "productName", required = false) String productName, Model model) {
+        List<SupplierProduct> supplierProducts;
+        if (productName == null || productName.isEmpty()) {
+            supplierProducts = productService.getAllProductsOrderedByName();
+        } else {
+            supplierProducts = productService.getProductsByName(productName);
+        }
+        List<Product> availableProducts = productService.getAllUniqueProducts();
         model.addAttribute("supplierProducts", supplierProducts);
         model.addAttribute("productStatuses", ProductStatus.values());
+        model.addAttribute("availableProducts", availableProducts);
+        model.addAttribute("selectedProductName", productName);
         return "all_products_list";
     }
 

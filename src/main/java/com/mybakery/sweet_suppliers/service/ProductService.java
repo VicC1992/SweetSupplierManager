@@ -37,4 +37,12 @@ public class ProductService {
     public List<SupplierProduct> getAllProductsOrderedByName() {
         return supplierProductRepository.findAll(Sort.by(Sort.Order.asc("product.name")));
     }
+
+    public List<SupplierProduct> getProductsByName(String productName) {
+        return supplierProductRepository.findByProduct_NameIgnoreCase(productName);
+    }
+
+    public List<Product> getAllUniqueProducts() {
+        return productRepository.findAllDistinctByOrderByNameAsc();
+    }
 }
