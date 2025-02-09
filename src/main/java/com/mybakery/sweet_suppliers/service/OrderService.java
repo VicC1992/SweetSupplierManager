@@ -1,12 +1,10 @@
 package com.mybakery.sweet_suppliers.service;
 
 import com.mybakery.sweet_suppliers.Enums.OrderStatus;
-import com.mybakery.sweet_suppliers.entity.Order;
-import com.mybakery.sweet_suppliers.entity.OrderItem;
-import com.mybakery.sweet_suppliers.entity.Product;
-import com.mybakery.sweet_suppliers.entity.SupplierProduct;
+import com.mybakery.sweet_suppliers.entity.*;
 import com.mybakery.sweet_suppliers.repository.OrderRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
+import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +23,22 @@ public class OrderService {
     @Autowired
     private SupplierProductRepository supplierProductRepository;
 
+    @Autowired
+    private SupplierRepository supplierRepository;
+
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
-    public Order createOrder(String name, OrderStatus status) {
+    public Order createOrder(String name, OrderStatus status, Long supplierId) {
+        Supplier supplier = supplierRepository.findById(supplierId)
+                .orElseThrow(()-> new IllegalArgumentException("Supplier not found with ID:" + supplierId));
+
         Order order = new Order();
         order.setName(name);
-        order.setStatus(status);
+        order.setStatus(status != null ? status : OrderStatus.InProcess);
         order.setOrderDate(LocalDateTime.now());
+        order.setSupplier(supplier);
         return orderRepository.save(order);
     }
 

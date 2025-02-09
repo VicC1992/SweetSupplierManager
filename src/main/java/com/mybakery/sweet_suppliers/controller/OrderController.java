@@ -11,6 +11,7 @@ import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
 import com.mybakery.sweet_suppliers.service.OrderItemService;
 import com.mybakery.sweet_suppliers.service.OrderService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
+import com.mybakery.sweet_suppliers.service.SupplierService;
 import com.mybakery.sweet_suppliers.util.PdfGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,9 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private SupplierService supplierService;
+
+    @Autowired
     private OrderItemService orderItemService;
 
     @Autowired
@@ -46,13 +50,13 @@ public class OrderController {
     @GetMapping("/create")
     public String showCreateOrderForm(Model model) {
         model.addAttribute("order", new OrderRequest());
-        model.addAttribute("orderStatuses", OrderStatus.values());
+        model.addAttribute("suppliers", supplierService.getAllSuppliers());
         return "create_order_form";
     }
 
     @PostMapping("/create")
     public String createOrder(@ModelAttribute OrderRequest orderRequest) {
-        orderService.createOrder(orderRequest.getName(), orderRequest.getStatus());
+        orderService.createOrder(orderRequest.getName(), OrderStatus.InProcess, orderRequest.getSupplierId());
         return "redirect:/orders/see-all";
     }
 
