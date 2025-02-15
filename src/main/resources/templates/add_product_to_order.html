@@ -14,9 +14,10 @@
     <label for="product">Select Product:</label>
     <select id="product" th:field="*{productId}" required>
         <option value="" disabled selected>-- Select a product --</option>
-        <option th:each="supplierProduct : ${supplierProducts}"
-                th:value="${supplierProduct.product.id}"
-                th:text="${supplierProduct.product.name}"></option>
+        <option th:each="product : ${supplierProducts}"
+                th:value="${product.id}"
+                th:text="${product.product.name + '-' + product.price + '-' + product.unitOfMeasure}">
+        </option>
     </select>
     <label for="quantity">Quantity:</label>
     <input type="number" id="quantity" th:field="*{quantity}" min="1" required />

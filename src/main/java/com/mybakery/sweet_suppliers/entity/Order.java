@@ -2,6 +2,7 @@ package com.mybakery.sweet_suppliers.entity;
 
 import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ public class Order {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "supplier_name", nullable = false)
+    private  String supplierName;
+
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
@@ -28,7 +32,7 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id", nullable = true)
     private Supplier supplier;
 
     //Getteri si Setteri
@@ -47,6 +51,14 @@ public class Order {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     public LocalDateTime getOrderDate() {

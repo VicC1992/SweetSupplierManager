@@ -29,4 +29,8 @@ public class SupplierProductService {
     public List<SupplierProduct> findAll() {
         return supplierProductRepository.findAll();
     }
+
+    public List<SupplierProduct> findBySupplierId(Long supplierId) {
+        return supplierProductRepository.findBySupplierId(supplierId);
+    }
 }

@@ -4,6 +4,7 @@ import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 
 public class OrderRequest {
     private String name;
+    private  String supplierName;
     private OrderStatus status = OrderStatus.InProcess;
     private Long supplierId;
 
@@ -29,5 +30,12 @@ public class OrderRequest {
 
     public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
+    }
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

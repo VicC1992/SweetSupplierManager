@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface SupplierProductRepository extends JpaRepository<SupplierProduct, Long> {
     Optional<SupplierProduct> findByProductId(Long productId);
     List<SupplierProduct> findByProduct_NameIgnoreCase(String productName);
+    List<SupplierProduct>findBySupplierId(Long supplierId);
 }

@@ -36,6 +36,7 @@ public class OrderService {
 
         Order order = new Order();
         order.setName(name);
+        order.setSupplierName(supplier.getName());
         order.setStatus(status != null ? status : OrderStatus.InProcess);
         order.setOrderDate(LocalDateTime.now());
         order.setSupplier(supplier);
@@ -80,5 +81,9 @@ public class OrderService {
         return orderRepository.findByOrderDateBetween(
                 today.atStartOfDay(), today.plusDays(1).atStartOfDay()
         );
+    }
+
+    public List<Order> getOrdersBySupplierId(Long supplierId) {
+        return orderRepository.findBySupplierId(supplierId);
     }
 }

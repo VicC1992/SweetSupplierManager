@@ -74,7 +74,7 @@
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
-            <td><a th:href="@{/orders/select-order-to-add-product/{productId}(productId=${product.product.id})}" class="btn btn-success">Add</a></td>
+            <td><a th:href="@{/orders/select-order-to-add-product/{supplierProductId}(supplierProductId=${product.id})}" class="btn btn-success">Add</a></td>
             <td>
                 <span th:class="'status-label ' + ${product.productStatus}">
                 <span th:text="${product.productStatus}">Status</span>

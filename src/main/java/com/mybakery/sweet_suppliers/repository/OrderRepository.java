@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByOrderDateBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<Order>findBySupplierId(Long supplierId);
 }

@@ -62,7 +62,11 @@ public class OrderController {
 
     @GetMapping("/{orderId}/add-product")
     public String showAddProductForm(@PathVariable Long orderId, Model model) {
-        List<SupplierProduct> supplierProducts = supplierProductService.findAll();
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(()-> new IllegalArgumentException("Order not found with ID: " + orderId));
+        Long supplierId = order.getSupplier().getId();
+
+        List<SupplierProduct> supplierProducts = supplierProductService.findBySupplierId(supplierId);
         model.addAttribute("orderId", orderId);
         model.addAttribute("supplierProducts", supplierProducts);
         model.addAttribute("orderItemRequest", new OrderItemRequest());
@@ -83,30 +87,30 @@ public class OrderController {
         orderItem.setProduct(supplierProduct.getProduct());
         orderItem.setQuantity(orderItemRequest.getQuantity());
         orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
+        orderItem.setPrice(supplierProduct.getPrice());
         orderItemRepository.save(orderItem);
         return "redirect:/orders/" + orderId + "/details";
     }
 
-    @GetMapping("/select-order-to-add-product/{productId}")
-    public String showOrdersForProduct(@PathVariable Long productId, Model model) {
-        List<Order> orders = orderService.getAllOrders();
+    @GetMapping("/select-order-to-add-product/{supplierProductId}")
+    public String showOrdersForProduct(@PathVariable Long supplierProductId, Model model) {
+        SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
+                .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + supplierProductId));
+        List<Order> orders = orderService.getOrdersBySupplierId(supplierProduct.getSupplier().getId());
         if (orders.isEmpty()) {
             throw new IllegalStateException("No orders found.");
         }
-        System.out.println("Produc ID:" + productId);
-        orders.forEach(order -> System.out.println("Order ID:" + order.getId()));
         model.addAttribute("orders", orders);
-        model.addAttribute("productId", productId);
+        model.addAttribute("supplierProductId", supplierProductId);
         return "select_order";
     }
 
-    @PostMapping("/{orderId}/add-product-direct/{productId}")
-    public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long productId) {
+    @PostMapping("/{orderId}/add-product-direct/{supplierProductId}")
+    public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long supplierProductId) {
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(()-> new IllegalArgumentException("Order not found with Id:" + orderId));
-        SupplierProduct supplierProduct = supplierProductRepository.findByProductId(productId)
-                .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + productId));
-
+        SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
+                .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + supplierProductId));
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(supplierProduct.getProduct());
