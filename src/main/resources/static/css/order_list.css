@@ -9,3 +9,8 @@
 	font-weight: bold;
 	text-align: center;
 }
+
+.dropdown-auto-width {
+	width: auto;
+	display: inline-block;
+}

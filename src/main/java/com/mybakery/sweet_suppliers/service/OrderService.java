@@ -86,4 +86,8 @@ public class OrderService {
     public List<Order> getOrdersBySupplierId(Long supplierId) {
         return orderRepository.findBySupplierId(supplierId);
     }
+
+    public List<Order> getOrdersByStatus(OrderStatus status) {
+        return orderRepository.findByStatus(status);
+    }
 }

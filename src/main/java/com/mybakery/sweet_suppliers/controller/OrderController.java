@@ -121,9 +121,19 @@ public class OrderController {
         return "redirect:/orders/" + orderId + "/details";
     }
 
-    @GetMapping("see-all")
-    public String viewALlOrders(Model model) {
-        model.addAttribute("orders", orderService.getAllOrders());
+    @GetMapping("/see-all")
+    public String viewAllOrders(@RequestParam(value = "status", required = false) OrderStatus status, Model model) {
+        List<Order> orders;
+        if (status == null) {
+            orders = orderService.getAllOrders();
+        } else {
+            orders = orderService.getOrdersByStatus(status);
+        }
+
+        model.addAttribute("orders", orders);
+        model.addAttribute("orderStatuses", OrderStatus.values());
+        model.addAttribute("selectedStatus", status);
+
         return "orders_list";
     }
 
