@@ -47,4 +47,11 @@ public class OrderItemService {
     public void removeOrderItem(Long orderItemId) {
         orderItemRepository.deleteById(orderItemId);
     }
+
+    public void updateRemark(Long itemId, String remark) {
+        OrderItem item = orderItemRepository.findById(itemId)
+                .orElseThrow(()-> new RuntimeException("Order Item not found"));
+        item.setRemark(remark);
+        orderItemRepository.save(item);
+    }
 }

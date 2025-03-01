@@ -23,6 +23,8 @@ public class OrderItem {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    private String remark = "";
+
     @Enumerated(EnumType.STRING)
     @Column(name = "unit_of_measure", nullable = false)
     private UnitOfMeasure unitOfMeasure;
@@ -61,6 +63,14 @@ public class OrderItem {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark (String remark) {
+        this.remark = remark;
     }
 
     public UnitOfMeasure getUnitOfMeasure() {

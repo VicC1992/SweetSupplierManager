@@ -44,7 +44,7 @@
     <br>
         <div>
             <p><strong>Order Name:</strong> <span th:text="${order.name}"></span></p>
-            <div>
+            <div th:if="${viewType == 'detailed'}">
                 <p><strong>Status:</strong></p>
                 <form th:action="@{/orders/{orderId}/update-status(orderId=${order.id})}" method="post">
                     <select name="status" class="form-control dropdown-auto-width"
@@ -64,9 +64,15 @@
         </div>
         <br>
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-sm btn-warning btn-spacing" th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">
+        <a class="btn btn-sm btn-warning btn-spacing" th:if="${viewType == 'detailed'}" th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">
             Add Product
         </a>
+        <br>
+        <form th:action="@{/orders/{orderId}/set-status(orderId=${order.id})}" method="post" th:if="${viewType != 'detailed'}" style="display:inline;">
+            <input type="hidden" name="status" value="Received" />
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-sm btn-danger btn-spacing">Received</button>
+        </form>
         <br>
         <a class="btn btn-sm btn-success" th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}">
             Download Order
@@ -79,8 +85,9 @@
                 <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
+                <th th:if="${viewType != 'detailed'}">Remarks</th>
                 <th>Unit of Measure</th>
-                <th>Delete product from order</th>
+                <th th:if="${viewType == 'detailed'}">Delete product from order</th>
             </tr>
         </thead>
     <tbody>
@@ -93,11 +100,20 @@
                 <input type="number" name="quantity" th:value="${item.quantity}"
                        class="form-control" style="width: 80px;" min="1" required />
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;">Update</button>
+                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;" th:if="${viewType == 'detailed'}">Update</button>
+            </form>
+        </td>
+        <td th:if="${viewType != 'detailed'}">
+            <form th:action="@{/orders/{orderId}/update-remark/{itemId}(orderId=${order.id}, itemId=${item.id})}"
+                  method="post" class="form-inline">
+                <input type="text" name="remark" th:value="${item.remark}"
+                       class="form-control" style="width: 200px;" />
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;">Save</button>
             </form>
         </td>
         <td th:text="${item.unitOfMeasure}"></td>
-        <td>
+        <td th:if="${viewType == 'detailed'}">
             <form th:action="@{/orders/{orderId}/remove-product/{itemId}(orderId=${order.id}, itemId=${item.id})}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn btn-danger">Remove</button>

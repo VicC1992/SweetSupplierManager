@@ -18,12 +18,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+
+import static com.mybakery.sweet_suppliers.Enums.OrderStatus.Received;
 
 @Controller
 @RequestMapping("orders")
@@ -137,14 +140,29 @@ public class OrderController {
         return "orders_list";
     }
 
+    @GetMapping("/received")
+    public String viewReceivedOrders(Model model) {
+        List<Order> orders = orderService.getOrdersByStatus(OrderStatus.Received);
+        model.addAttribute("orders", orders);
+        return "received_orders";
+    }
+
+    @GetMapping("/to-receive")
+    public String viewToReceivedOrders(Model model) {
+        List<Order> orders = orderService.getOrdersByStatus(OrderStatus.ToReceive);
+        model.addAttribute("orders", orders);
+        return "to_receive_orders";
+    }
+
     @GetMapping("/{orderId}/details")
-    public String viewOrderDetails(@PathVariable Long orderId, Model model) {
+    public String viewOrderDetails(@PathVariable Long orderId,@RequestParam(defaultValue = "detailed") String viewType, Model model) {
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
 
         model.addAttribute("order", order);
         model.addAttribute("orderItems", order.getOrderItems());
         model.addAttribute("orderStatuses", OrderStatus.values());
+        model.addAttribute("viewType", viewType);
         return "order_details";
     }
 
@@ -154,8 +172,16 @@ public class OrderController {
                 .orElseThrow(()-> new IllegalArgumentException("Order not found with ID:" + orderId));
         order.setStatus(status);
         orderService.saveOrder(order);
-        //redirectAttributes.addFlashAttribute("succesMessage", "Order status updated successfull");
         return "redirect:/orders/{orderId}/details";
+    }
+
+    @PostMapping("/{orderId}/set-status")
+    public String setReceivedStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(()-> new IllegalArgumentException("Order not found with ID:" + orderId));
+        order.setStatus(OrderStatus.Received);
+        orderService.saveOrder(order);
+        return "redirect:/orders/to-receive";
     }
 
     @PostMapping("/{orderId}/update-quantity/{itemId}")
@@ -178,6 +204,12 @@ public class OrderController {
                 .orElseThrow(()-> new IllegalArgumentException("OrderItem not found with ID:" + itemId));
         orderItemRepository.delete(orderItem);
         return "redirect:/orders/" + orderId + "/details";
+    }
+
+    @PostMapping("/{orderId}/update-remark/{itemId}")
+    public String updateOrderItemRemark(@PathVariable Long orderId, @PathVariable Long itemId, @RequestParam String remark) {
+        orderItemService.updateRemark(itemId, remark);
+        return "redirect:/orders/" + orderId + "/details?viewType=summary";
     }
 
     @GetMapping("/{orderId}/download-pdf")
