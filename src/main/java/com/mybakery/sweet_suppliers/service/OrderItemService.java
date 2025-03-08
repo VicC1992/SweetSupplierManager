@@ -53,5 +53,13 @@ public class OrderItemService {
                 .orElseThrow(()-> new RuntimeException("Order Item not found"));
         item.setRemark(remark);
         orderItemRepository.save(item);
+        updateOrderIssueStatus(item.getOrder());
+    }
+
+    private void updateOrderIssueStatus(Order order) {
+        boolean issue = order.getOrderItems().stream()
+                .anyMatch(item -> item.getRemark() != null && !item.getRemark().isEmpty());
+        order.setIssue(issue);
+        orderRepository.save(order);
     }
 }

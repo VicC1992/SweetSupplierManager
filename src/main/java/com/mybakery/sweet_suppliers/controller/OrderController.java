@@ -132,7 +132,6 @@ public class OrderController {
         } else {
             orders = orderService.getOrdersByStatus(status);
         }
-
         model.addAttribute("orders", orders);
         model.addAttribute("orderStatuses", OrderStatus.values());
         model.addAttribute("selectedStatus", status);

@@ -24,6 +24,8 @@ public class Order {
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
+    private boolean issue = false;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private OrderStatus status;
@@ -67,6 +69,14 @@ public class Order {
 
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public boolean getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Boolean issue) {
+        this.issue = issue;
     }
 
     public OrderStatus getStatus() {

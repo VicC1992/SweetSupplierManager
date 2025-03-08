@@ -68,13 +68,13 @@
             Add Product
         </a>
         <br>
-        <form th:action="@{/orders/{orderId}/set-status(orderId=${order.id})}" method="post" th:if="${viewType != 'detailed'}" style="display:inline;">
+        <form th:action="@{/orders/{orderId}/set-status(orderId=${order.id})}" method="post" th:if="${viewType != 'detailed' && viewType != 'simple'}" style="display:inline;">
             <input type="hidden" name="status" value="Received" />
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn btn-sm btn-danger btn-spacing">Received</button>
         </form>
         <br>
-        <a class="btn btn-sm btn-success" th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}">
+        <a class="btn btn-sm btn-success" th:if="${viewType == 'detailed' || viewType == 'simple'}" th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}">
             Download Order
         </a>
     </div>
