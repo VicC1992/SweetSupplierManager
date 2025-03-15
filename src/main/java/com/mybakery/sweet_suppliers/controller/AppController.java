@@ -7,16 +7,9 @@ import com.mybakery.sweet_suppliers.repository.UserRepository;
 
 @Controller
 public class AppController {
-    @Autowired
-    private UserRepository userRepository;
 
     @GetMapping("")
     public String viewHomePage() {
-        return "home";
-    }
-
-    @GetMapping("/home-page")
-    public String viewFirstPage() {
-        return "manager_home_page";
+        return "main_page";
     }
 }

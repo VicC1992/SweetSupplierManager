@@ -40,14 +40,22 @@
         <!-- Product Status -->
         <div class="form-group">
             <label class="form-label">Product Status:</label><br>
-            <select id="status" th:field="*{productStatus}" class="form-control">
+            <select id="status" th:field="*{productStatus}" class="form-control dropdown-auto-width" onchange="updateDropdownColor(this)">
                 <option value="" disabled selected>Select a status</option>
-                <option th:each="productStatus : ${productStatuses}" th:value ="${productStatus}" th:text="${productStatus}"></option>
+                <option th:each="productStatus : ${productStatuses}"
+                        th:value="${productStatus}"
+                        th:text="${productStatus}"
+                        th:classappend="${productStatus == 'Activ' ? 'option-green' :
+                               productStatus == 'Test' ? 'option-yellow' :
+                               productStatus == 'Inactiv' ? 'option-red' : ''}">
+                </option>
             </select>
-        </div><button type="submit" class="btn btn-primary mt-3"th:text="${supplierProduct.id} ? 'Save Changes' : 'Add Product'"></button>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3"th:text="${supplierProduct.id} ? 'Save Changes' : 'Add Product'"></button>
 
     </form>
 </div>
+<script th:src="@{/js/add_edit_product.js}"></script>
 </body>
 
 </html>

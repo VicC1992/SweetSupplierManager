@@ -135,7 +135,6 @@ public class OrderController {
         model.addAttribute("orders", orders);
         model.addAttribute("orderStatuses", OrderStatus.values());
         model.addAttribute("selectedStatus", status);
-
         return "orders_list";
     }
 

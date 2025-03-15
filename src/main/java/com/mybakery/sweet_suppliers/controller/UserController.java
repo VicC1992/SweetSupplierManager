@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.controller;
 
+import com.mybakery.sweet_suppliers.Enums.RoleName;
 import com.mybakery.sweet_suppliers.entity.Role;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
@@ -37,7 +38,7 @@ public class UserController {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
-        Role userRole = roleRepository.findByName("USER").orElseThrow(()-> new RuntimeException("Role USER not found"));
+        Role userRole = roleRepository.findByName(RoleName.ROLE_PROCUREMENT_MANAGER).orElseThrow(()-> new RuntimeException("Role PROCUREMENT_MANAGER not found"));
         user.setRole(userRole);
         userRepository.save(user);
         return "register_success";

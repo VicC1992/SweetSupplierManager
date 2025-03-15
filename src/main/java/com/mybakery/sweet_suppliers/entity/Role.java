@@ -1,18 +1,20 @@
 package com.mybakery.sweet_suppliers.entity;
 
+import com.mybakery.sweet_suppliers.Enums.RoleName;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "roles")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(nullable = false, unique = true, length = 20)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, unique = true, length = 50)
+    private RoleName name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> users = new ArrayList<>();
@@ -33,11 +35,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
+    public RoleName getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(RoleName name) {
         this.name = name;
     }
 }

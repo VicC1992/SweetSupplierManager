@@ -4,24 +4,33 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import java.io.IOException;
+import java.util.Collection;
 
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        boolean isAdmin = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        boolean isUser = authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"));
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        if (isAdmin) {
-            response.sendRedirect("/admin/users");
-        } else if (isUser) {
-            response.sendRedirect("/home-page");
-        } else {
-            response.sendRedirect("/");
+        for (GrantedAuthority authority : authorities) {
+            String role = authority.getAuthority();
+
+            if (role.equals("ROLE_ADMIN")) {
+                response.sendRedirect("/admin/home-page");
+                return;
+            } else if (role.equals("ROLE_PROCUREMENT_MANAGER")) {
+                response.sendRedirect("/procurement-manager/home-page");
+                return;
+            } else if (role.equals("ROLE_WAREHOUSE_MANAGER")) {
+                response.sendRedirect("/warehouse-manager/home-page");
+                return;
+            }
         }
+        response.sendRedirect("/");
     }
 }

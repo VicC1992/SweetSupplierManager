@@ -95,3 +95,18 @@ input.form-control:focus {
 .form-group {
 	margin-bottom: 15px;
 }
+
+.dropdown-green {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.dropdown-yellow {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.dropdown-red {
+	background-color: #f8d7da;
+	color: #721c24;
+}

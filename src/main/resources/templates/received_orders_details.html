@@ -14,7 +14,7 @@
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/home-page}">
+            <a class="navbar-brand" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
                 <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
                 SweetSupplierManager
             </a>

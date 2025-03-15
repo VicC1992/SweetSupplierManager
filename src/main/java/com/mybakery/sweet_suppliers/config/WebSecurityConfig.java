@@ -43,9 +43,9 @@ public class WebSecurityConfig {
         http.authenticationProvider(authenticationProvider());
 
         http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/procurement-manager/**").hasAnyRole("PROCUREMENT_MANAGER","ADMIN")
+                        .requestMatchers("/warehouse-manager/**").hasAnyRole("WAREHOUSE_MANAGER","ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/users").authenticated()
-                        .requestMatchers("/suppliers/add").authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(login ->
