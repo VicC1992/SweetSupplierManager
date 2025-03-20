@@ -5,6 +5,8 @@ import com.mybakery.sweet_suppliers.entity.*;
 import com.mybakery.sweet_suppliers.repository.OrderRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
+import com.mybakery.sweet_suppliers.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class OrderService {
 
     @Autowired
     private SupplierRepository supplierRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public OrderService(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
@@ -92,5 +97,18 @@ public class OrderService {
 
     public List<Order> getOrdersByStatus(OrderStatus status) {
         return orderRepository.findByStatus(status);
+    }
+
+    public void receiveOrder(Long orderId, String email) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()->new EntityNotFoundException("Order not found with ID:" + orderId));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new EntityNotFoundException("User not found with email:" + email ));
+        order.setStatus(OrderStatus.Received);
+        order.setReceivedAt(LocalDateTime.now());
+        order.setReceivedBy(user);
+
+        orderRepository.save(order);
     }
 }

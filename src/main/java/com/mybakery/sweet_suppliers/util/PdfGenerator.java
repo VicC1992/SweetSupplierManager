@@ -10,6 +10,7 @@ import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class PdfGenerator {
@@ -57,10 +58,13 @@ public class PdfGenerator {
 
             document.add(new Paragraph("Total Price: " + String.format("%.2f", totalPrice)));
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = order.getReceivedAt().format(formatter);
+
             if (order.getStatus().equals(OrderStatus.Received)) {
                 document.add(new Paragraph(" "));
-                document.add(new Paragraph("Received by: "));
-                document.add(new Paragraph("Received at: "));
+                document.add(new Paragraph("Received by: " + order.getReceivedBy().getFirstName() + " " + order.getReceivedBy().getLastName()));
+                document.add(new Paragraph("Received at: " + formattedDate));
             }
 
         } catch (Exception e) {

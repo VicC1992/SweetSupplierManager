@@ -60,6 +60,7 @@
   <tr>
     <th>Product Name</th>
     <th>Price</th>
+    <th>Non-Conformities</th>
     <th>Supplier</th>
     <th>Status</th>
   </tr>
@@ -67,7 +68,8 @@
   <tbody>
   <tr th:each="supplierProduct : ${supplierProducts}">
     <td th:text="${supplierProduct.product.name}"></td>
-    <td th:text="${supplierProduct.price}"></td>
+    <td th:text="${supplierProduct.price + ' Ron/' + supplierProduct.unitOfMeasure}"></td>
+    <td th:text="${supplierProduct.nonConformities}">Non-Conformities</td>
     <td th:text="${supplierProduct.supplier.name}"></td>
     <td>
       <form th:action="@{/products/change-status/{supplierProductId}(supplierProductId=${supplierProduct.id})}" method="post">

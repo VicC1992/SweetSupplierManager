@@ -18,6 +18,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -192,11 +194,13 @@ public class OrderController {
     }
 
     @PostMapping("/{orderId}/set-status")
-    public String setReceivedStatus(@PathVariable Long orderId, @RequestParam OrderStatus status) {
-        Order order = orderService.getOrderById(orderId)
-                .orElseThrow(()-> new IllegalArgumentException("Order not found with ID:" + orderId));
-        order.setStatus(OrderStatus.Received);
-        orderService.saveOrder(order);
+    public String setReceivedStatus(@PathVariable Long orderId, @RequestParam OrderStatus status, @AuthenticationPrincipal UserDetails loggedUser) {
+
+        if (loggedUser == null) {
+            throw new IllegalStateException("No authenticated user found");
+        }
+
+        orderService.receiveOrder(orderId, loggedUser.getUsername());
         return "redirect:/orders/to-receive";
     }
 

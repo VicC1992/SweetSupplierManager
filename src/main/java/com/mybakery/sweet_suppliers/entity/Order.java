@@ -34,6 +34,13 @@ public class Order {
     @JoinColumn(name = "supplier_id", nullable = true)
     private Supplier supplier;
 
+    @Column(name = "received_at")
+    private LocalDateTime receivedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "received_by_user_id")
+    private User receivedBy;
+
     //Getteri si Setteri
 
     public Long getId() {
@@ -58,6 +65,14 @@ public class Order {
 
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public LocalDateTime getReceivedAt() {
+        return receivedAt;
+    }
+
+    public void setReceivedAt(LocalDateTime receivedAt) {
+        this.receivedAt = receivedAt;
     }
 
     public boolean getIssue() {
@@ -100,6 +115,14 @@ public class Order {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public User getReceivedBy() {
+        return receivedBy;
+    }
+
+    public void setReceivedBy(User receivedBy) {
+        this.receivedBy = receivedBy;
     }
 
 }
