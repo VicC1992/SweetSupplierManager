@@ -33,4 +33,9 @@ public class SupplierProductService {
     public List<SupplierProduct> findBySupplierId(Long supplierId) {
         return supplierProductRepository.findBySupplierId(supplierId);
     }
+
+    public List<SupplierProduct> getSupplierProductsSorted(Long supplierId) {
+        return supplierProductRepository.findBySupplierIdOrderByProductName(supplierId);
+    }
+
 }

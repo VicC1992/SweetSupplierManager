@@ -18,9 +18,6 @@ public class Order {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "supplier_name", nullable = false)
-    private  String supplierName;
-
     @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
 
@@ -53,14 +50,6 @@ public class Order {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
     }
 
     public LocalDateTime getOrderDate() {

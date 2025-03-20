@@ -1,5 +1,6 @@
 package com.mybakery.sweet_suppliers.service;
 
+import com.mybakery.sweet_suppliers.Enums.SupplierStatus;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ public class SupplierService {
         this.supplierRepository = supplierRepository;
     }
 
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
+    public List<Supplier> getActiveSuppliers() {
+        return supplierRepository.findActiveSuppliersSortedByName(SupplierStatus.Activ);
     }
 
     public Supplier findById(Long id) {
@@ -36,9 +37,4 @@ public class SupplierService {
     public void updateSupplier(Supplier supplier) {
         supplierRepository.save(supplier);
     }
-
-    public void deleteById(Long id) {
-        supplierRepository.deleteById(id);
-    }
-
 }

@@ -65,7 +65,7 @@
             <tbody>
             <tr th:each="order : ${orders}">
                 <td th:text="${order.name}"></td>
-                <td th:text="${order.supplierName}"></td>
+                <td th:text="${order.supplier.name}"></td>
                 <td th:text="${order.status}"></td>
             <td>
             <a th:href="@{/orders/{orderId}/details(orderId=${order.id})}" class="btn btn-info">See order</a>

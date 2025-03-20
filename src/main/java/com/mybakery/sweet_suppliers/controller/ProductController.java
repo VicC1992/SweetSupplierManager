@@ -35,7 +35,7 @@ public class ProductController {
     @GetMapping("/list/{supplierId}")
     public String viewSupplierProducts(@PathVariable Long supplierId, Model model) {
         Supplier supplier = supplierService.findById(supplierId);
-        List<SupplierProduct> supplierProducts = supplier.getSupplierProducts();
+        List<SupplierProduct> supplierProducts = supplierProductService.getSupplierProductsSorted(supplierId);
         model.addAttribute("supplier", supplier);
         model.addAttribute("products", supplierProducts);
         return "products_list";

@@ -1,6 +1,7 @@
 package com.mybakery.sweet_suppliers.controller;
 
 import com.mybakery.sweet_suppliers.Enums.DeliveryDays;
+import com.mybakery.sweet_suppliers.Enums.SupplierStatus;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import com.mybakery.sweet_suppliers.service.SupplierService;
@@ -9,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -24,7 +23,7 @@ public class SupplierController {
 
     @GetMapping("/list")
     public String listSuppliers(Model model) {
-        List<Supplier> listSuppliers = supplierRepository.findAll();
+        List<Supplier> listSuppliers = supplierService.getActiveSuppliers();
         model.addAttribute("listSuppliers", listSuppliers);
         return "suppliers_list";
     }
@@ -38,6 +37,7 @@ public class SupplierController {
     @PostMapping("/add")
     public String addSupplier(Supplier supplier, @RequestParam List<DeliveryDays> deliveryDays) {
         supplier.setDeliveryDays(deliveryDays);
+        supplier.setSupplierStatus(SupplierStatus.Activ);
         supplierService.addSupplier(supplier);
         return "redirect:/suppliers/list";
     }
@@ -61,9 +61,11 @@ public class SupplierController {
         return "redirect:/suppliers/list";
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteSupplier(@PathVariable Long id) {
-        supplierService.deleteById(id);
+    @PostMapping("/set-inactiv/{id}")
+    public String setInactivStatus(@PathVariable Long id) {
+        Supplier supplier = supplierService.findById(id);
+        supplier.setSupplierStatus(SupplierStatus.Inactiv);
+        supplierService.saveSupplier(supplier);
         return "redirect:/suppliers/list";
     }
 

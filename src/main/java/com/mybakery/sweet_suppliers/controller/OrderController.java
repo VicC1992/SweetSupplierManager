@@ -18,15 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Comparator;
 import java.util.List;
-
-import static com.mybakery.sweet_suppliers.Enums.OrderStatus.Received;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("orders")
@@ -53,7 +52,7 @@ public class OrderController {
     @GetMapping("/create")
     public String showCreateOrderForm(Model model) {
         model.addAttribute("order", new OrderRequest());
-        model.addAttribute("suppliers", supplierService.getAllSuppliers());
+        model.addAttribute("suppliers", supplierService.getActiveSuppliers());
         return "create_order_form";
     }
 
@@ -61,6 +60,19 @@ public class OrderController {
     public String createOrder(@ModelAttribute OrderRequest orderRequest) {
         orderService.createOrder(orderRequest.getName(), OrderStatus.InProcess, orderRequest.getSupplierId());
         return "redirect:/orders/see-all";
+    }
+
+    @GetMapping("/create-order-toReturn")
+    public String showCreateToReturnOrderForm(Model model) {
+        model.addAttribute("order", new OrderRequest());
+        model.addAttribute("suppliers", supplierService.getActiveSuppliers());
+        return "create_to_return_order_form";
+    }
+
+    @PostMapping("/create-order-toReturn")
+    public String createToReturnOrder(@ModelAttribute OrderRequest orderRequest) {
+        orderService.createOrder(orderRequest.getName(), OrderStatus.Return, orderRequest.getSupplierId());
+        return "redirect:/procurement-manager/orders-to-return";
     }
 
     @GetMapping("/{orderId}/add-product")
@@ -128,9 +140,11 @@ public class OrderController {
     public String viewAllOrders(@RequestParam(value = "status", required = false) OrderStatus status, Model model) {
         List<Order> orders;
         if (status == null) {
-            orders = orderService.getAllOrders();
+            orders = orderService.getAllOrdersSorted();
         } else {
-            orders = orderService.getOrdersByStatus(status);
+            orders = orderService.getOrdersByStatus(status).stream()
+                    .sorted(Comparator.comparing(Order::getOrderDate))
+                    .collect(Collectors.toList());
         }
         model.addAttribute("orders", orders);
         model.addAttribute("orderStatuses", OrderStatus.values());
@@ -157,8 +171,12 @@ public class OrderController {
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
 
+        List<OrderItem> sortedOrderItems = order.getOrderItems().stream()
+                .sorted(Comparator.comparing(item -> item.getProduct().getName()))
+                .collect(Collectors.toList());
+
         model.addAttribute("order", order);
-        model.addAttribute("orderItems", order.getOrderItems());
+        model.addAttribute("orderItems", sortedOrderItems);
         model.addAttribute("orderStatuses", OrderStatus.values());
         model.addAttribute("viewType", viewType);
         return "order_details";
@@ -227,5 +245,29 @@ public class OrderController {
         headers.setContentDispositionFormData("attachment", "Order_" + orderId + ".pdf");
 
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
+    }
+    @GetMapping("/to-return")
+    public String viewToRetunrOrders(Model model) {
+        List<Order> orders = orderService.getOrdersByStatus(OrderStatus.Return);
+        model.addAttribute("orders", orders);
+        return "orders_to_return";
+    }
+
+    @GetMapping("/to-receive/warehouse-manager")
+    public String showOrdersToReceive(Model model) {
+        model.addAttribute("orders", orderService.getOrdersByDate());
+        return "pending_orders";
+    }
+
+    @GetMapping("/to-receive/{orderId}/details")
+    public String viewOrder(@PathVariable Long orderId, @RequestParam(defaultValue = "detailed") String viewType, Model model) {
+        Order order = orderService.getOrderById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
+
+        model.addAttribute("order", order);
+        model.addAttribute("orderItems", order.getOrderItems());
+        model.addAttribute("orderStatuses", OrderStatus.values());
+        model.addAttribute("viewType", viewType);
+        return "order_details";
     }
 }

@@ -1,6 +1,7 @@
 package com.mybakery.sweet_suppliers.util;
 
 import com.lowagie.text.pdf.PdfPTable;
+import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.OrderItem;
 
@@ -20,14 +21,14 @@ public class PdfGenerator {
 
             //title
             Font titleFont = new Font(Font.HELVETICA, 18, Font.BOLD);
-            Paragraph title = new Paragraph("Orders Details", titleFont);
+            Paragraph title = new Paragraph(order.getName(), titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
             //details
-            document.add(new Paragraph("Order ID:" + order.getId()));
-            document.add(new Paragraph("Date:" + order.getOrderDate()));
-            document.add(new Paragraph("Customer:" + order.getName()));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Supplier: " + order.getSupplier().getName()));
+            document.add(new Paragraph(" "));
 
             //table
             PdfPTable table = new PdfPTable(4);
@@ -55,6 +56,12 @@ public class PdfGenerator {
                     .sum();
 
             document.add(new Paragraph("Total Price: " + String.format("%.2f", totalPrice)));
+
+            if (order.getStatus().equals(OrderStatus.Received)) {
+                document.add(new Paragraph(" "));
+                document.add(new Paragraph("Received by: "));
+                document.add(new Paragraph("Received at: "));
+            }
 
         } catch (Exception e) {
             e.printStackTrace();

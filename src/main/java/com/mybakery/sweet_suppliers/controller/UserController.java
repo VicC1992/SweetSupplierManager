@@ -49,4 +49,14 @@ public class UserController {
         model.addAttribute("listUsers", listUsers);
         return "users";
     }
+
+    @GetMapping("/procurement-manager/home-page")
+    public String viewFirstPageProcurementManager() {
+        return "procurement_manager_home_page";
+    }
+
+    @GetMapping("/warehouse-manager/home-page")
+    public String viewFirstPageWarehouseManager() {
+        return "warehouse_manager_home_page";
+    }
 }

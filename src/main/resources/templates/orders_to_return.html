@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
 <head>
     <meta charset="ISO-8859-1">
-    <title>Suppliers List</title>
+    <title>To Return Orders</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/supplier_list.css">
+    <link rel="stylesheet" type="text/css" href="/css/order_list.css">
 </head>
+
 <body>
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
         <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/procurement-manager/home-page}">
+            <a class="navbar-brand" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
                 <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
                 SweetSupplierManager
             </a>
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
                 <ul class="navbar-nav custom-margin">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/create-edit-form}">Add new supplier</a>
+                        <a class="nav-link" th:href="@{/orders/create}">Create new order</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/see-all}">Orders</a>
+                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                 </ul>
+
                 <form th:action="@{/logout}" method="post" class="d-flex">
                     <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
                 </form>
@@ -35,34 +38,30 @@
 <div class="container text-center">
     <br>
     <div>
-        <h2>Suppliers List</h2>
+        <h1>To Return Orders</h1>
     </div>
     <br>
+
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-sm btn-success" th:href="@{/orders/create-order-toReturn}">
+            Create new order
+        </a>
+    </div>
     <div>
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>
+                <th>Order Name</th>
                 <th>Supplier Name</th>
-                <th>CUI</th>
-                <th>Contact Person</th>
-                <th>Phone Number</th>
-                <th>See details</th>
-                <th>Edit</th>
-                <th>Set Inactiv</th>
+                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="supplier: ${listSuppliers}">
-                <td th:text="${supplier.name}">Supplier Name</td>
-                <td th:text="${supplier.registrationUniqueCode}">CUI</td>
-                <td th:text="${supplier.contactPerson}">Contact Person</td>
-                <td th:text="${supplier.phoneNumber}">Phone Number</td>
-                <td><a th:href="@{/products/list/{id}(id=${supplier.id})}" class="btn btn-info">See products</a></td>
-                <td><a th:href="@{/suppliers/create-edit-form(id = ${supplier.id})}" class="btn btn-warning">Edit</a></td>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.name}"></td>
+                <td th:text="${order.supplierName}"></td>
                 <td>
-                    <form th:action="@{/suppliers/set-inactiv/{id}(id=${supplier.id})}" method="post">
-                        <button type="submit" class="btn btn-danger">Inactivate</button>
-                    </form>
+                    <a th:href="@{/orders/{orderId}/details?viewType=summary(orderId=${order.id})}" class="btn btn-info">See order</a>
                 </td>
             </tr>
             </tbody>
@@ -70,4 +69,5 @@
     </div>
 </div>
 </body>
+
 </html>

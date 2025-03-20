@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Create to Return Order</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/create_order.css">
+</head>
+
+<body>
+<div class="container text-center">
+    <h1>Create a new Order for Return</h1>
+    <form th:action="@{/orders/create-order-toReturn}" th:object="${order}" method="post">
+        <div class="form-group">
+            <label for="name">Order Name:</label>
+            <input type="text" id="name" th:field="*{name}" required placeholder="Order for: **/**/****">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="supplier">Select Supplier:</label>
+            <select id="supplier" th:field="*{supplierId}" class="form-control">
+                <option value="" disabled selected>Select a supplier</option>
+                <option th:each="supplier : ${suppliers}"
+                        th:value="${supplier.id}"
+                        th:text="${supplier.name}">
+                </option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Create Order</button>
+    </form>
+    <script th:src="@{/js/create_order_form.js}"></script>
+</div>
+</body>
+
+</html>

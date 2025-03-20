@@ -47,7 +47,7 @@
                 <td th:text="${order.name}"></td>
                 <td th:text="${order.status}"></td>
                 <td>
-                    <a th:href="@{/warehouse-manager/order-to-receive/{orderId}/details(orderId=${order.id})}" class="btn btn-info">See order</a>
+                    <a th:href="@{/orders/to-receive/{orderId}/details(orderId=${order.id})}" class="btn btn-info">See order</a>
                 </td>
             </tr>
             </tbody>

@@ -1,6 +1,8 @@
 package com.mybakery.sweet_suppliers.entity;
 
 import com.mybakery.sweet_suppliers.Enums.DeliveryDays;
+import com.mybakery.sweet_suppliers.Enums.ProductStatus;
+import com.mybakery.sweet_suppliers.Enums.SupplierStatus;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -24,6 +26,10 @@ public class Supplier {
 
     @Column(unique = true)
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "supplier_status", nullable = false)
+    private SupplierStatus status;
 
     @ElementCollection(targetClass = DeliveryDays.class)
     @CollectionTable(
@@ -78,6 +84,14 @@ public class Supplier {
             throw new IllegalArgumentException("The telephone number must be in the format: +40XXXXXXXXX");
         }
         this.phoneNumber = phoneNumber;
+    }
+
+    public SupplierStatus getSupplierStatus() {
+        return status;
+    }
+
+    public void setSupplierStatus(SupplierStatus status) {
+        this.status = status;
     }
 
     public List<DeliveryDays> getDeliveryDays() {
