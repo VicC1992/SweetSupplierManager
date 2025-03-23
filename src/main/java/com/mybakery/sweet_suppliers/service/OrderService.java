@@ -95,6 +95,13 @@ public class OrderService {
         return orderRepository.findBySupplierId(supplierId);
     }
 
+    public List<Order> getOrdersByReceivedDate(LocalDate date) {
+        return orderRepository.findByReceivedAtBetween(
+                date.atStartOfDay(),
+                date.plusDays(1).atStartOfDay()
+        );
+    }
+
     public List<Order> getOrdersByStatus(OrderStatus status) {
         return orderRepository.findByStatus(status);
     }

@@ -14,6 +14,7 @@ import com.mybakery.sweet_suppliers.service.SupplierProductService;
 import com.mybakery.sweet_suppliers.service.SupplierService;
 import com.mybakery.sweet_suppliers.util.PdfGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -155,9 +157,15 @@ public class OrderController {
     }
 
     @GetMapping("/received")
-    public String viewReceivedOrders(Model model) {
-        List<Order> orders = orderService.getOrdersByStatus(OrderStatus.Received);
+    public String viewReceivedOrders(@RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, Model model) {
+        List<Order> orders;
+        if (date != null) {
+            orders = orderService.getOrdersByReceivedDate(date);
+        } else {
+            orders = orderService.getOrdersByStatus(OrderStatus.Received);
+        }
         model.addAttribute("orders", orders);
+        model.addAttribute("selectedDate", date);
         return "received_orders";
     }
 
