@@ -48,7 +48,7 @@
         <a href="/suppliers/create-edit-form">Add new Supplier</a>
     </div>
     <div class="wheel">
-        <a href="/settings">Out-of-Stock Notifictaion</a>
+        <a href="/products/restock-list">Out-of-Stock Notifictaion<span th:if="${restockCount > 0}" class="notification-badge" th:text="${restockCount}"></span></a>
     </div>
     <div class="wheel">
         <a href="/orders/received">Orders History</a>

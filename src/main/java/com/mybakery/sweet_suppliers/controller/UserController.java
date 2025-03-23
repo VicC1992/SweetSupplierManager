@@ -4,6 +4,7 @@ import com.mybakery.sweet_suppliers.Enums.RoleName;
 import com.mybakery.sweet_suppliers.entity.Role;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
+import com.mybakery.sweet_suppliers.repository.RestockItemRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -26,6 +27,9 @@ public class UserController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private RestockItemRepository restockItemRepository;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -51,7 +55,9 @@ public class UserController {
     }
 
     @GetMapping("/procurement-manager/home-page")
-    public String viewFirstPageProcurementManager() {
+    public String viewFirstPageProcurementManager(Model model) {
+        long restockCount = restockItemRepository.count();
+        model.addAttribute("restockCount", restockCount);
         return "procurement_manager_home_page";
     }
 

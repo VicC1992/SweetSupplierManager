@@ -74,7 +74,7 @@ public class OrderController {
     @PostMapping("/create-order-toReturn")
     public String createToReturnOrder(@ModelAttribute OrderRequest orderRequest) {
         orderService.createOrder(orderRequest.getName(), OrderStatus.Return, orderRequest.getSupplierId());
-        return "redirect:/procurement-manager/orders-to-return";
+        return "redirect:/orders/to-return";
     }
 
     @GetMapping("/{orderId}/add-product")

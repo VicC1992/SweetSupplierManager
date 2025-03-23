@@ -48,17 +48,21 @@
                 <th>Order Name</th>
                 <th>Supplier Name</th>
                 <th>Issues</th>
+                <th>Received</th>
+                <th>Received By</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="order : ${orders}">
                 <td th:text="${order.name}"></td>
-                <td th:text="${order.supplierName}"></td>
+                <td th:text="${order.supplier.name}"></td>
                 <td>
                     <span th:if="${order.issue}" class="badge badge-danger">Needs Attention</span>
                     <span th:unless="${order.issue}" class="badge badge-success">OK</span>
                 </td>
+                <td th:text="${#temporals.format(order.receivedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                <td th:text="${order.receivedBy.getFirstName() + ' ' + order.receivedBy.getLastName()}"></td>
                 <td>
                     <a th:href="@{/orders/{orderId}/details?viewType=simple(orderId=${order.id})}" class="btn btn-info">See order</a>
                 </td>

@@ -5,8 +5,10 @@ import com.mybakery.sweet_suppliers.Enums.UnitOfMeasure;
 import com.mybakery.sweet_suppliers.entity.Product;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.SupplierProduct;
+import com.mybakery.sweet_suppliers.repository.ProductRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierProductRepository;
 import com.mybakery.sweet_suppliers.service.ProductService;
+import com.mybakery.sweet_suppliers.service.RestockItemService;
 import com.mybakery.sweet_suppliers.service.SupplierProductService;
 import com.mybakery.sweet_suppliers.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,12 @@ public class ProductController {
 
     @Autowired
     private SupplierProductService supplierProductService;
+
+    @Autowired
+    private RestockItemService restockItemService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("/list/{supplierId}")
     public String viewSupplierProducts(@PathVariable Long supplierId, Model model) {
@@ -118,6 +126,26 @@ public class ProductController {
             supplierProductService.save(supplierProduct);
         }
         return "redirect:/products/see-all";
+    }
+
+    @GetMapping("/restock-list")
+    public String showRestockList(Model model) {
+        model.addAttribute("restockItems", restockItemService.getAllItems());
+        model.addAttribute("products",productRepository.findAll());
+        return "restock_list";
+    }
+
+    @PostMapping("/restock/add")
+    public String addRestockItem(@RequestParam Long productId, @RequestParam String quantity) {
+        Product product = productRepository.findById(productId).orElseThrow();
+        restockItemService.addItem(product, quantity);
+        return "redirect:/products/restock-list";
+    }
+
+    @PostMapping("/restock-item/remove/{id}")
+    public String removeRestockItem(@PathVariable Long id) {
+        restockItemService.removeItem(id);
+        return "redirect:/products/restock-list";
     }
 
 }

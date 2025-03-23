@@ -73,10 +73,14 @@
     <td th:text="${supplierProduct.supplier.name}"></td>
     <td>
       <form th:action="@{/products/change-status/{supplierProductId}(supplierProductId=${supplierProduct.id})}" method="post">
-        <select name="productStatus" class="form-control dropdown-auto-width">
+        <select name="productStatus" class="form-control dropdown-auto-width statusDropdown"
+                onchange="updateDropdownColor(this)">
           <option th:each="productStatus : ${productStatuses}"
                   th:value ="${productStatus}"
                   th:text="${productStatus}"
+                  th:classappend="${productStatus == 'Activ' ? 'option-green' :
+                                    productStatus == 'Test' ? 'option-yellow' :
+                                    productStatus == 'Inactiv' ? 'option-red' : ''}"
                   th:selected="${productStatus.name() == supplierProduct.productStatus.name()}"
                   data-status="${productStatus.name()}">
 

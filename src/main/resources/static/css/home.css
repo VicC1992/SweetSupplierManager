@@ -59,3 +59,12 @@ body {
 	font-weight: bold;
 	text-align: center;
 }
+.notification-badge {
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 5px 10px;
+    margin-left: 5px;
+}

@@ -1,16 +1,16 @@
-.option-active {
+.dropdown-green {
 	background-color: #d4edda;
 	color: #155724;
 }
 
-.option-inactive {
-	background-color: #f8d7da;
-	color: #721c24;
-}
-
-.option-pending {
+.dropdown-yellow {
 	background-color: #fff3cd;
 	color: #856404;
+}
+
+.dropdown-red {
+	background-color: #f8d7da;
+	color: #721c24;
 }
 
 .dropdown-auto-width {

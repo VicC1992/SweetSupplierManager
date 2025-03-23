@@ -1,24 +1,27 @@
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-
-    const dropdowns = document.querySelectorAll('select[name="productStatus"]');
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdowns = document.querySelectorAll('.statusDropdown');
+    dropdowns.forEach(updateDropdownColor);
 
     dropdowns.forEach(dropdown => {
-
-      const options = dropdown.querySelectorAll('option');
-
-      options.forEach(option => {
-
-        const status = option.getAttribute('data-status');
-
-        if (status == "Activ") {
-          option.classList.add('option-active');
-        } else if (status == "Inactiv") {
-          option.classList.add('option-inactive');
-        } else if (status == "Test") {
-          option.classList.add('option-pending');
-        }
-      });
+        dropdown.addEventListener('change', function() {
+            updateDropdownColor(dropdown);
+        });
     });
-  });
-</script>
+});
+
+function updateDropdownColor(dropdown) {
+
+        dropdown.classList.remove('dropdown-green', 'dropdown-yellow', 'dropdown-red');
+
+        switch (dropdown.value) {
+            case 'Activ':
+                dropdown.classList.add('dropdown-green');
+                break;
+            case 'Test':
+                dropdown.classList.add('dropdown-yellow');
+                break;
+            case 'Inactiv':
+                dropdown.classList.add('dropdown-red');
+                break;
+        }
+    }

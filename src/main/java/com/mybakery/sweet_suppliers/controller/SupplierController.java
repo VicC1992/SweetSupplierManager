@@ -28,39 +28,6 @@ public class SupplierController {
         return "suppliers_list";
     }
 
-    @GetMapping("/add")
-    public String showSupplierForm(Model model) {
-        model.addAttribute("supplier", new Supplier());
-        return "add_new_supplier_form";
-    }
-
-    @PostMapping("/add")
-    public String addSupplier(Supplier supplier, @RequestParam List<DeliveryDays> deliveryDays) {
-        supplier.setDeliveryDays(deliveryDays);
-        supplier.setSupplierStatus(SupplierStatus.Activ);
-        supplierService.addSupplier(supplier);
-        return "redirect:/suppliers/list";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Supplier supplier = supplierService.findById(id);
-        model.addAttribute("supplier", supplier);
-        return "edit_supplier_form";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String updateSupplier(@PathVariable Long id,@ModelAttribute Supplier supplier) {
-        Supplier existingSupplier = supplierService.findById(id);
-        existingSupplier.setName(supplier.getName());
-        existingSupplier.setRegistrationUniqueCode(supplier.getRegistrationUniqueCode());
-        existingSupplier.setContactPerson(supplier.getContactPerson());
-        existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
-        existingSupplier.setDeliveryDays(supplier.getDeliveryDays());
-        supplierService.updateSupplier(existingSupplier);
-        return "redirect:/suppliers/list";
-    }
-
     @PostMapping("/set-inactiv/{id}")
     public String setInactivStatus(@PathVariable Long id) {
         Supplier supplier = supplierService.findById(id);
@@ -85,9 +52,11 @@ public class SupplierController {
             existingSupplier.setContactPerson(supplier.getContactPerson());
             existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
             existingSupplier.setDeliveryDays(supplier.getDeliveryDays());
+            existingSupplier.setSupplierStatus(supplier.getSupplierStatus());
             supplierService.updateSupplier(existingSupplier);
         } else {
             supplier.setDeliveryDays(deliveryDays);
+            supplier.setSupplierStatus(SupplierStatus.Activ);
             supplierService.addSupplier(supplier);
         }
         return "redirect:/suppliers/list";
