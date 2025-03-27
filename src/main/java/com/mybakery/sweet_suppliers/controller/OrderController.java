@@ -24,9 +24,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -94,12 +96,19 @@ public class OrderController {
 
     @PostMapping("/{orderId}/add-product")
     public String addProductToOrder(@PathVariable Long orderId,
-                                    @ModelAttribute OrderItemRequest orderItemRequest) {
+                                    @ModelAttribute OrderItemRequest orderItemRequest, RedirectAttributes redirectAttributes) {
 
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with ID: " + orderId));
         SupplierProduct supplierProduct = supplierProductService.findById(orderItemRequest.getProductId())
                 .orElseThrow(()->new IllegalArgumentException("Product not found with ID:"));
+
+        boolean productExists = order.getOrderItems().stream()
+                .anyMatch(orderItem -> orderItem.getProduct().getId().equals(supplierProduct.getProduct().getId()));
+        if (productExists) {
+            redirectAttributes.addFlashAttribute("errorMessage", "This product is already in the order!");
+            return "redirect:/orders/" + orderId + "/details";
+        }
 
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
@@ -108,6 +117,7 @@ public class OrderController {
         orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
         orderItem.setPrice(supplierProduct.getPrice());
         orderItemRepository.save(orderItem);
+        redirectAttributes.addFlashAttribute("successMessage", "Product added successfully!");
         return "redirect:/orders/" + orderId + "/details";
     }
 
@@ -115,21 +125,33 @@ public class OrderController {
     public String showOrdersForProduct(@PathVariable Long supplierProductId, Model model) {
         SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
                 .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + supplierProductId));
-        List<Order> orders = orderService.getOrdersBySupplierId(supplierProduct.getSupplier().getId());
-        if (orders.isEmpty()) {
-            throw new IllegalStateException("No orders found.");
-        }
-        model.addAttribute("orders", orders);
+        List<Order> allOrders = orderService.getOrdersBySupplierId(supplierProduct.getSupplier().getId());
+
+        List<Order> inProcessOrders = allOrders.stream()
+                .filter(order -> order.getStatus() == OrderStatus.InProcess)
+                .toList();
+        model.addAttribute("orders", inProcessOrders);
         model.addAttribute("supplierProductId", supplierProductId);
+
+        if (inProcessOrders.isEmpty()) {
+            model.addAttribute("noOrderMessage", "No Orders In Process found");
+        }
         return "select_order";
     }
 
     @PostMapping("/{orderId}/add-product-direct/{supplierProductId}")
-    public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long supplierProductId) {
+    public String addProductToOrderDirect(@PathVariable Long orderId, @PathVariable Long supplierProductId, RedirectAttributes redirectAttributes) {
         Order order = orderService.getOrderById(orderId)
                 .orElseThrow(()-> new IllegalArgumentException("Order not found with Id:" + orderId));
         SupplierProduct supplierProduct = supplierProductService.findById(supplierProductId)
                 .orElseThrow(()-> new IllegalArgumentException("Product not found with ID:" + supplierProductId));
+        boolean productExists = order.getOrderItems().stream()
+                .anyMatch(orderItem -> orderItem.getProduct().getId().equals(supplierProduct.getProduct().getId()));
+        if (productExists) {
+            redirectAttributes.addFlashAttribute("errorMessage", "This product is already in the order!");
+            return "redirect:/orders/" + orderId + "/details";
+        }
+
         OrderItem orderItem = new OrderItem();
         orderItem.setOrder(order);
         orderItem.setProduct(supplierProduct.getProduct());
@@ -137,23 +159,17 @@ public class OrderController {
         orderItem.setUnitOfMeasure(supplierProduct.getUnitOfMeasure());
         orderItem.setPrice(supplierProduct.getPrice());
         orderItemRepository.save(orderItem);
+        redirectAttributes.addFlashAttribute("successMessage", "Product added successfully!");
         return "redirect:/orders/" + orderId + "/details";
     }
 
-    @GetMapping("/see-all")
-    public String viewAllOrders(@RequestParam(value = "status", required = false) OrderStatus status, Model model) {
-        List<Order> orders;
-        if (status == null) {
-            orders = orderService.getAllOrdersSorted();
-        } else {
-            orders = orderService.getOrdersByStatus(status).stream()
+    @GetMapping("/in-process")
+    public String viewOrdersInProcess(Model model) {
+        List<Order> orders = orderService.getOrdersByStatus(OrderStatus.InProcess).stream()
                     .sorted(Comparator.comparing(Order::getOrderDate))
                     .collect(Collectors.toList());
-        }
         model.addAttribute("orders", orders);
-        model.addAttribute("orderStatuses", OrderStatus.values());
-        model.addAttribute("selectedStatus", status);
-        return "orders_list";
+        return "orders_in_process";
     }
 
     @GetMapping("/received")
@@ -184,10 +200,12 @@ public class OrderController {
         List<OrderItem> sortedOrderItems = order.getOrderItems().stream()
                 .sorted(Comparator.comparing(item -> item.getProduct().getName()))
                 .collect(Collectors.toList());
-
+        List<OrderStatus> filteredStatuses = Arrays.stream(OrderStatus.values())
+                .filter(status -> status == OrderStatus.InProcess || status == OrderStatus.ToReceive)
+                .collect(Collectors.toList());
+        model.addAttribute("orderStatuses", filteredStatuses);
         model.addAttribute("order", order);
         model.addAttribute("orderItems", sortedOrderItems);
-        model.addAttribute("orderStatuses", OrderStatus.values());
         model.addAttribute("viewType", viewType);
         return "order_details";
     }
@@ -198,7 +216,7 @@ public class OrderController {
                 .orElseThrow(()-> new IllegalArgumentException("Order not found with ID:" + orderId));
         order.setStatus(status);
         orderService.saveOrder(order);
-        return "redirect:/orders/{orderId}/details";
+        return "redirect:/orders/in-process";
     }
 
     @PostMapping("/{orderId}/set-status")

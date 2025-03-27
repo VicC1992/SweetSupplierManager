@@ -24,7 +24,7 @@
                         <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/see-all}">Orders</a>
+                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
                     </li>
                 </ul>
 
@@ -41,10 +41,17 @@
     <div>
         <h2>Order Details</h2>
     </div>
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div th:if="${successMessage}" class="alert alert-success" role="alert">
+        <span th:text="${successMessage}"></span>
+    </div>
     <br>
         <div>
             <p><strong>Order Name:</strong> <span th:text="${order.name}"></span></p>
-            <div th:if="${viewType == 'detailed'}">
+            <div th:if="${order.status.name() == 'InProcess'}">
                 <p><strong>Status:</strong></p>
                 <form th:action="@{/orders/{orderId}/update-status(orderId=${order.id})}" method="post">
                     <select name="status" class="form-control dropdown-auto-width"
@@ -64,17 +71,17 @@
         </div>
         <br>
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-sm btn-warning btn-spacing" th:if="${viewType == 'detailed'}" th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">
+        <a class="btn btn-sm btn-warning btn-spacing" th:if="${order.status.name() == 'InProcess'}" th:href="@{/orders/{orderId}/add-product(orderId=${order.id})}">
             Add Product
         </a>
         <br>
-        <form th:action="@{/orders/{orderId}/set-status(orderId=${order.id})}" method="post" th:if="${viewType != 'detailed' && viewType != 'simple'}" style="display:inline;">
+        <form th:action="@{/orders/{orderId}/set-status(orderId=${order.id})}" method="post" th:if="${order.status.name() == 'ToReceive'}" style="display:inline;">
             <input type="hidden" name="status" value="Received" />
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn btn-sm btn-danger btn-spacing">Received</button>
         </form>
         <br>
-        <a class="btn btn-sm btn-success" th:if="${viewType == 'detailed' || viewType == 'simple'}" th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}">
+        <a class="btn btn-sm btn-success" th:if="${order.status.name() != 'InProcess'}" th:href="@{/orders/{orderId}/download-pdf(orderId=${order.id})}">
             Download Order
         </a>
     </div>
@@ -85,9 +92,8 @@
                 <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th th:if="${viewType != 'detailed'}">Remarks</th>
-                <th>Unit of Measure</th>
-                <th th:if="${viewType == 'detailed'}">Delete product from order</th>
+                <th th:if="${order.status.name() != 'InProcess'}">Remarks</th>
+                <th th:if="${order.status.name() == 'InProcess'}">Delete product</th>
             </tr>
         </thead>
     <tbody>
@@ -98,22 +104,26 @@
             <form th:action="@{/orders/{orderId}/update-quantity/{itemId}(orderId=${order.id}, itemId=${item.id})}"
                   method="post" class="form-inline">
                 <input type="number" name="quantity" th:value="${item.quantity}"
-                       class="form-control" style="width: 80px;" min="1" required />
+                       class="form-control" style="width: 80px;" min="1" required/>
+                <div class="input-group-append">
+                    <span class="input-group-text" th:text="${item.unitOfMeasure}"></span>
+                </div>
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;" th:if="${viewType == 'detailed'}">Update</button>
+                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;" th:if="${order.status.name() == 'InProcess'}">Update</button>
             </form>
         </td>
-        <td th:if="${viewType != 'detailed'}">
+        <td th:if="${order.status.name() != 'InProcess'}">
+            <div class="d-flex justify-content-center">
             <form th:action="@{/orders/{orderId}/update-remark/{itemId}(orderId=${order.id}, itemId=${item.id})}"
-                  method="post" class="form-inline">
+                  method="post" class="d-flex align-items-center">
                 <input type="text" name="remark" th:value="${item.remark}"
-                       class="form-control" style="width: 200px;" />
+                       class="form-control text-center" style="width: 200px;" />
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <button type="submit" class="btn btn-primary btn-sm" style="margin-left: 5px;">Save</button>
+                <button type="submit" class="btn btn-primary btn-sm ms-2" style="margin-left: 5px;">Save</button>
             </form>
+            </div>
         </td>
-        <td th:text="${item.unitOfMeasure}"></td>
-        <td th:if="${viewType == 'detailed'}">
+        <td th:if="${order.status.name() == 'InProcess'}">
             <form th:action="@{/orders/{orderId}/remove-product/{itemId}(orderId=${order.id}, itemId=${item.id})}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <button type="submit" class="btn btn-danger">Remove</button>

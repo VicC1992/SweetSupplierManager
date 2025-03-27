@@ -24,7 +24,7 @@
                         <a class="nav-link"th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/see-all}">Orders</a>
+                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
                     </li>
                 </ul>
                 <form th:action="@{/logout}" method="post" class="d-flex">
@@ -42,7 +42,10 @@
     </div>
     <br>
     <div>
-        <table class="table table-striped table-bordered">
+        <div th:if="${noOrdersMessage}" class="alert alert-warning text-center">
+            <p th:text="${noOrdersMessage}"></p>
+        </div>
+        <table th:if="${orders}" class="table table-striped table-bordered">
         <thead class="thead-dark">
         <tr>
             <th>Order Name</th>
