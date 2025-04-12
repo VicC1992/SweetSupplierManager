@@ -1,0 +1,23 @@
+.table td, .table th {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-container select,
+.form-container input[type="text"] {
+    width: 200px;
+    padding: 5px;
+}
+
+.custom-margin {
+	margin-left: 350px;
+}

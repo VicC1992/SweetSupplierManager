@@ -12,26 +12,27 @@
 
 <body>
 <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
-                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
-                SweetSupplierManager
-            </a>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-                <ul class="navbar-nav custom-margin">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
+                    <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="me-2">
+                </a>
+            </div>
+            <div class="d-none d-lg-block">
+                <ul class="navbar-nav flex-row gap-4">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/create}">Create new order</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/orders/create}">Create new order</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                 </ul>
-
-                <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
-                </form>
             </div>
+            <form th:action="@{/logout}" method="post" class="d-flex">
+                <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
+            </form>
+
         </div>
     </nav>
 </div>
@@ -41,12 +42,20 @@
         <h1>To Return Orders</h1>
     </div>
     <br>
-
     <div class="d-flex justify-content-end mb-3">
-        <a class="btn btn-sm btn-success" th:href="@{/orders/create-order-toReturn}">
-            Create new order
-        </a>
+        <div class="button-container">
+            <a class="btn btn-sm btn-info btn-spacing" th:href="@{/orders/sent}">
+                See sent Orders
+            </a>
+
+            <a class="btn btn-sm btn-success btn-spacing"
+               th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}"
+               th:href="@{/orders/create-order-toReturn}">
+                Create New Order
+            </a>
+        </div>
     </div>
+
     <div>
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">

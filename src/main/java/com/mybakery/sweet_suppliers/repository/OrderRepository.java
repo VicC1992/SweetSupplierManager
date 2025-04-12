@@ -16,6 +16,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query("SELECT o FROM Order o WHERE o.receivedAt >= :startOfDay AND o.receivedAt < :endOfDay")
     List<Order> findByReceivedAtBetween(@Param("startOfDay")LocalDateTime startOfDay, @Param("endOfDay")LocalDateTime endOfDay);
 
+    @Query("SELECT o FROM Order o WHERE o.sentAt >= :startOfDay AND o.sentAt < :endOfDay")
+    List<Order> findBySentAtBetween(@Param("startOfDay")LocalDateTime startOfDay, @Param("endOfDay")LocalDateTime endOfDay);
+
     List<Order> findByOrderDateBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
     List<Order>findBySupplierId(Long supplierId);
     List<Order>findByStatus(OrderStatus status);

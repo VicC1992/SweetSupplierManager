@@ -32,9 +32,6 @@ public class SupplierProduct {
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
 
-
-    //Getteri si setteri
-
     public Long getId() {
         return id;
     }

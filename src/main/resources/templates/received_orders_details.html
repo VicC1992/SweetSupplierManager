@@ -21,10 +21,10 @@
             <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
                 <ul class="navbar-nav custom-margin">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/orders/in-process}">Orders</a>
                     </li>
                 </ul>
 

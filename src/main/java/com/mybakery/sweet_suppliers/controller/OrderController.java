@@ -65,7 +65,7 @@ public class OrderController {
     @PostMapping("/create")
     public String createOrder(@ModelAttribute OrderRequest orderRequest) {
         orderService.createOrder(orderRequest.getName(), OrderStatus.InProcess, orderRequest.getSupplierId());
-        return "redirect:/orders/see-all";
+        return "redirect:/orders/in-process";
     }
 
     @GetMapping("/create-order-toReturn")
@@ -185,6 +185,19 @@ public class OrderController {
         return "received_orders";
     }
 
+    @GetMapping("/sent")
+    public String viewSentOrders(@RequestParam(name = "date", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, Model model) {
+        List<Order> orders;
+        if (date != null) {
+            orders = orderService.getOrdersBySentDate(date);
+        } else {
+            orders = orderService.getOrdersByStatus(OrderStatus.Sent);
+        }
+        model.addAttribute("orders", orders);
+        model.addAttribute("selectedDate", date);
+        return "sent_orders";
+    }
+
     @GetMapping("/to-receive")
     public String viewToReceivedOrders(Model model) {
         List<Order> orders = orderService.getOrdersByStatus(OrderStatus.ToReceive);
@@ -225,9 +238,30 @@ public class OrderController {
         if (loggedUser == null) {
             throw new IllegalStateException("No authenticated user found");
         }
-
         orderService.receiveOrder(orderId, loggedUser.getUsername());
+
+        if (hasRole(loggedUser,"ROLE_WAREHOUSE_MANAGER")) {
+            return "redirect:/orders/to-receive/warehouse-manager";
+        } else if (hasRole(loggedUser, "ROLE_PROCUREMENT_MANAGER")) {
+            return "redirect:/orders/to-receive";
+        }
         return "redirect:/orders/to-receive";
+    }
+
+    private boolean hasRole(UserDetails userDetails, String role) {
+        return userDetails.getAuthorities().stream()
+                .map(auth -> auth.getAuthority())
+                .anyMatch(role::equals);
+    }
+
+    @PostMapping("/{orderId}/set-status-sent")
+    public String setSentStatus(@PathVariable Long orderId, @RequestParam OrderStatus status, @AuthenticationPrincipal UserDetails loggedUser) {
+        if (loggedUser == null) {
+            throw new IllegalStateException("No authenticated user found");
+        }
+
+        orderService.sentOrder(orderId, loggedUser.getUsername());
+        return "redirect:/orders/to-return";
     }
 
     @PostMapping("/{orderId}/update-quantity/{itemId}")
@@ -276,6 +310,7 @@ public class OrderController {
 
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
+
     @GetMapping("/to-return")
     public String viewToRetunrOrders(Model model) {
         List<Order> orders = orderService.getOrdersByStatus(OrderStatus.Return);
@@ -285,7 +320,8 @@ public class OrderController {
 
     @GetMapping("/to-receive/warehouse-manager")
     public String showOrdersToReceive(Model model) {
-        model.addAttribute("orders", orderService.getOrdersByDate());
+        List<Order> orders = orderService.getOrdersToReceiveToday();
+        model.addAttribute("orders", orders);
         return "pending_orders";
     }
 

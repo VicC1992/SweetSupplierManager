@@ -31,8 +31,6 @@ public class OrderItem {
 
     private BigDecimal price;
 
-    // Getteri si Setteri
-
     public Long getId() {
         return id;
     }

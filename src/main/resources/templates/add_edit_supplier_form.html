@@ -9,30 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/css/add_supplier.css">
 </head>
 <body>
-<div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
-                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
-                SweetSupplierManager
-            </a>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-                <ul class="navbar-nav custom-margin">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
-                    </li>
-                </ul>
-
-                <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
-                </form>
-            </div>
-        </div>
-    </nav>
-</div>
 <div class="container text-center">
     <h1 th:text="${supplier.id == null} ? 'Add New Supplier' : 'Edit Supplier'"></h1>
     <form th:action="@{/suppliers/save-edit}" th:object="${supplier}" method="post" style="max-width: 600px; margin: 0 auto;">

@@ -9,12 +9,15 @@ import com.mybakery.sweet_suppliers.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -102,8 +105,37 @@ public class OrderService {
         );
     }
 
+    public List<Order> getOrdersBySentDate(LocalDate date) {
+        return orderRepository.findBySentAtBetween(
+                date.atStartOfDay(),
+                date.plusDays(1).atStartOfDay()
+        );
+    }
+
     public List<Order> getOrdersByStatus(OrderStatus status) {
         return orderRepository.findByStatus(status);
+    }
+
+    public List<Order> getOrdersToReceiveToday() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate today = LocalDate.now();
+
+        List<Order>allOrders = getOrdersByStatus(OrderStatus.ToReceive);
+        return allOrders.stream()
+                .filter(order -> {
+                    String orderName = order.getName();
+                    String datePart = extractDateFromOrderName(orderName);
+                    return datePart != null && LocalDate.parse(datePart, formatter).equals(today);
+                })
+                .collect(Collectors.toList());
+
+    }
+
+    private String extractDateFromOrderName(String orderName) {
+        if (orderName.startsWith("Order for: ")) {
+            return orderName.substring(11);
+        }
+        return null;
     }
 
     public void receiveOrder(Long orderId, String email) {
@@ -115,7 +147,18 @@ public class OrderService {
         order.setStatus(OrderStatus.Received);
         order.setReceivedAt(LocalDateTime.now());
         order.setReceivedBy(user);
+        orderRepository.save(order);
+    }
 
+    public void sentOrder(Long orderId, String email) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()->new EntityNotFoundException("Order not found with ID:" + orderId));
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new EntityNotFoundException("User not found with email:" + email ));
+        order.setStatus(OrderStatus.Sent);
+        order.setSentAt(LocalDateTime.now());
+        order.setSentBy(user);
         orderRepository.save(order);
     }
 }

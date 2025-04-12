@@ -1,7 +1,6 @@
 package com.mybakery.sweet_suppliers.entity;
 
 import com.mybakery.sweet_suppliers.Enums.DeliveryDays;
-import com.mybakery.sweet_suppliers.Enums.ProductStatus;
 import com.mybakery.sweet_suppliers.Enums.SupplierStatus;
 import jakarta.persistence.*;
 

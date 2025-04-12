@@ -14,3 +14,15 @@
 	width: auto;
 	display: inline-block;
 }
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-spacing {
+    min-width: 180px;
+    text-align: center;
+}

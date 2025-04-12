@@ -2,7 +2,6 @@ package com.mybakery.sweet_suppliers.entity;
 
 import com.mybakery.sweet_suppliers.Enums.OrderStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,9 +36,16 @@ public class Order {
     @Column(name = "received_at")
     private LocalDateTime receivedAt;
 
+    @Column(name = "sent_at")
+    private LocalDateTime sentAt;
+
     @ManyToOne
     @JoinColumn(name = "received_by_user_id")
     private User receivedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "sent_by_user_id")
+    private User sentBy;
 
     //Getteri si Setteri
 
@@ -73,6 +79,14 @@ public class Order {
 
     public void setReceivedAt(LocalDateTime receivedAt) {
         this.receivedAt = receivedAt;
+    }
+
+    public LocalDateTime getSentAt() {
+        return sentAt;
+    }
+
+    public void setSentAt(LocalDateTime sentAt) {
+        this.sentAt = sentAt;
     }
 
     public boolean getIssue() {
@@ -124,5 +138,14 @@ public class Order {
     public void setReceivedBy(User receivedBy) {
         this.receivedBy = receivedBy;
     }
+
+    public User getSentBy() {
+        return sentBy;
+    }
+
+    public void setSentBy(User sentBy) {
+        this.sentBy = sentBy;
+    }
+
 
 }

@@ -17,8 +17,6 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SupplierProduct> supplierProducts = new ArrayList<>();
 
-    // Getteri si Setteri
-
     public Long getId() {
         return id;
     }

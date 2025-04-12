@@ -75,10 +75,12 @@
                 </form>
             </td>
             <td><a th:href="@{/orders/select-order-to-add-product/{supplierProductId}(supplierProductId=${product.id})}" class="btn btn-success">Add</a></td>
-            <td>
+            <td class="text-center">
+                <div class="d-flex justify-content-center">
                 <span th:class="'status-label ' + ${product.productStatus}">
                 <span th:text="${product.productStatus}">Status</span>
                 </span>
+                </div>
             </td>
         </tr>
         </tbody>

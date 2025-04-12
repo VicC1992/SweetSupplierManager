@@ -43,17 +43,21 @@ public class WebSecurityConfig {
         http.authenticationProvider(authenticationProvider());
 
         http.authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers("/webjars/**", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/procurement-manager/**").hasAnyRole("PROCUREMENT_MANAGER","ADMIN")
                         .requestMatchers("/warehouse-manager/**").hasAnyRole("WAREHOUSE_MANAGER","ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(login ->
                         login.usernameParameter("email")
                                 .successHandler(customAuthenticationSuccessHandler())
                                 .permitAll()
                 )
-                .logout(logout -> logout.logoutSuccessUrl("/").permitAll()
+                .logout(logout -> logout.logoutSuccessUrl("/").permitAll())
+                .sessionManagement(session ->
+                        session.maximumSessions(1).expiredUrl("/login?expired")
                 );
 
         return http.build();

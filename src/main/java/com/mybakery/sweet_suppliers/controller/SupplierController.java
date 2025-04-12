@@ -52,7 +52,7 @@ public class SupplierController {
             existingSupplier.setContactPerson(supplier.getContactPerson());
             existingSupplier.setPhoneNumber(supplier.getPhoneNumber());
             existingSupplier.setDeliveryDays(supplier.getDeliveryDays());
-            existingSupplier.setSupplierStatus(supplier.getSupplierStatus());
+            existingSupplier.setSupplierStatus(SupplierStatus.Activ);
             supplierService.updateSupplier(existingSupplier);
         } else {
             supplier.setDeliveryDays(deliveryDays);

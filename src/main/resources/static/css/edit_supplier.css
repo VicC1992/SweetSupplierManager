@@ -4,7 +4,6 @@ body {
 	margin: 0;
 	padding: 0;
 	background-image: url('/images/istockphoto1.jpg');
-	/* Înlocuiește cu calea imaginii tale */
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;

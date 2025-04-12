@@ -1,3 +1,4 @@
-.custom-margin {
-	margin-left: 350px;
+.navbar-center {
+    z-index: 1;
+    white-space: nowrap;
 }

@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="ISO-8859-1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Suppliers List</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
@@ -10,25 +11,33 @@
 </head>
 <body>
 <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{/procurement-manager/home-page}">
-                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
-                SweetSupplierManager
-            </a>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-                <ul class="navbar-nav custom-margin">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+
+            <!-- Stânga: Logo + Titlu -->
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/procurement-manager/home-page}">
+                    <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="me-2">
+                </a>
+            </div>
+
+            <!-- Mijloc: Meniu centrat -->
+            <div class="d-none d-lg-block">
+                <ul class="navbar-nav flex-row gap-4">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/create-edit-form}">Add new supplier</a>
+                        <a class="nav-link text-white" th:href="@{/suppliers/create-edit-form}">Add new supplier</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
+                        <a class="nav-link text-white" th:href="@{/orders/in-process}">Orders</a>
                     </li>
                 </ul>
-                <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
-                </form>
             </div>
+
+            <!-- Dreapta: Sign Out -->
+            <form th:action="@{/logout}" method="post" class="d-flex">
+                <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
+            </form>
+
         </div>
     </nav>
 </div>
@@ -46,6 +55,7 @@
                 <th>CUI</th>
                 <th>Contact Person</th>
                 <th>Phone Number</th>
+                <th>Delivery days</th>
                 <th>See details</th>
                 <th>Edit</th>
                 <th>Set Inactiv</th>
@@ -57,6 +67,11 @@
                 <td th:text="${supplier.registrationUniqueCode}">CUI</td>
                 <td th:text="${supplier.contactPerson}">Contact Person</td>
                 <td th:text="${supplier.phoneNumber}">Phone Number</td>
+                <td>
+                    <span th:each="day : ${supplier.deliveryDays}" class="badge bg-info mx-1">
+                        <i class="fas fa-calendar-day"></i> <span th:text="${day}"></span>
+                    </span>
+                </td>
                 <td><a th:href="@{/products/list/{id}(id=${supplier.id})}" class="btn btn-info">See products</a></td>
                 <td><a th:href="@{/suppliers/create-edit-form(id = ${supplier.id})}" class="btn btn-warning">Edit</a></td>
                 <td>

@@ -7,31 +7,31 @@
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="/css/supplier_list.css">
+    <link rel="stylesheet" type="text/css" href="/css/restock_list.css">
 </head>
 
 <body>
 <div>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Tenth navbar example">
-        <div class="container-fluid">
-            <a class="navbar-brand" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
-                <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="d-inline-block align-text-center">
-                SweetSupplierManager
-            </a>
-            <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarsExample08">
-                <ul class="navbar-nav custom-margin">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')') ? '/procurement-manager/home-page' : '/warehouse-manager/home-page'}}">
+                    <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="me-2">
+                </a>
+            </div>
+            <div class="d-none d-lg-block">
+                <ul class="navbar-nav flex-row gap-4">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/suppliers/list}">Suppliers</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/suppliers/list}">Suppliers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/orders/in-process}">Orders</a>
+                        <a class="nav-link" th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}" th:href="@{/orders/in-process}">Orders</a>
                     </li>
                 </ul>
-
-                <form th:action="@{/logout}" method="post" class="d-flex">
-                    <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
-                </form>
             </div>
+            <form th:action="@{/logout}" method="post" class="d-flex">
+                <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
+            </form>
         </div>
     </nav>
 </div>
@@ -42,14 +42,26 @@
         <h2>Out of Stock List</h2>
     </div>
     <br>
+
+    <div class="form-container">
+        <h4>Add Product</h4>
+        <form th:action="@{/products/restock/add}" method="post" class="d-flex align-items-center">
+            <select name="productId" class="form-control">
+                <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+            </select>
+            <input type="text" name="quantity" placeholder="Existing quantity" class="form-control mx-2">
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+
     <div>
         <table class="table table-striped table-bordered">
             <thead class="thead-dark">
             <tr>
                 <th>Product Name</th>
-                <th>Existing quantity</th>
+                <th>Existing Quantity</th>
                 <th>Added</th>
-                <th>Action</th>
+                <th th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}">Action</th>
             </tr>
             </thead>
             <tbody>
@@ -57,23 +69,14 @@
                 <td th:text="${item.product.name}"></td>
                 <td th:text="${item.existingQuantity}"></td>
                 <td th:text="${#temporals.format(item.addedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
-                <td>
+                <td th:if="${#authorization.expression('hasRole(''PROCUREMENT_MANAGER'')')}">
                     <form th:action="@{/products/restock-item/remove/{id}(id=${item.id})}" method="post">
-                        <button type="submit" class="btn btn-danger mt-3">Restock</button>
+                        <button type="submit" class="btn btn-danger">Restock</button>
                     </form>
                 </td>
             </tr>
             </tbody>
         </table>
-
-        <h3>Add product to list</h3>
-        <form th:action="@{/products/restock/add}" method="post">
-            <select name="productId">
-                <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
-            </select>
-            <input type="text" name="quantity" placeholder="Existing quantity">
-            <button type="submit" class="btn btn-success mt-3">Add</button>
-        </form>
     </div>
 </div>
 
