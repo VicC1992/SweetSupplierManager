@@ -78,7 +78,7 @@ public class OrderController {
     @PostMapping("/create-order-toReturn")
     public String createToReturnOrder(@ModelAttribute OrderRequest orderRequest) {
         orderService.createOrder(orderRequest.getName(), OrderStatus.Return, orderRequest.getSupplierId());
-        return "redirect:/orders/to-return";
+        return "redirect:/orders/to-return/procurement-manager";
     }
 
     @GetMapping("/{orderId}/add-product")
@@ -311,11 +311,18 @@ public class OrderController {
         return new ResponseEntity<>(pdfContent, headers, HttpStatus.OK);
     }
 
-    @GetMapping("/to-return")
+    @GetMapping("/to-return/procurement-manager")
     public String viewToRetunrOrders(Model model) {
         List<Order> orders = orderService.getOrdersByStatus(OrderStatus.Return);
         model.addAttribute("orders", orders);
         return "orders_to_return";
+    }
+
+    @GetMapping("/to-return/warehouse-manager")
+    public String viewToReturnTodayOrders(Model model) {
+        List<Order> orders = orderService.getOrdersToSentToday();
+        model.addAttribute("orders", orders);
+        return "to_return_orders_today";
     }
 
     @GetMapping("/to-receive/warehouse-manager")

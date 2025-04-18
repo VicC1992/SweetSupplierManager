@@ -131,7 +131,20 @@ public class OrderService {
 
     }
 
+    public List<Order> getOrdersToSentToday() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate today = LocalDate.now();
 
+        List<Order>allOrders = getOrdersByStatus(OrderStatus.Return);
+        return allOrders.stream()
+                .filter(order -> {
+                    String orderName = order.getName();
+                    String datePart = extractDateFromOrderName(orderName);
+                    return datePart != null && LocalDate.parse(datePart, formatter).equals(today);
+                })
+                .collect(Collectors.toList());
+
+    }
 
     private String extractDateFromOrderName(String orderName) {
         if (orderName.startsWith("Order for: ")) {
