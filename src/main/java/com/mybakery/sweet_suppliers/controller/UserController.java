@@ -1,11 +1,13 @@
 package com.mybakery.sweet_suppliers.controller;
 
 import com.mybakery.sweet_suppliers.Enums.RoleName;
+import com.mybakery.sweet_suppliers.entity.Order;
 import com.mybakery.sweet_suppliers.entity.Role;
 import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
 import com.mybakery.sweet_suppliers.repository.RestockItemRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
+import com.mybakery.sweet_suppliers.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -30,6 +32,9 @@ public class UserController {
 
     @Autowired
     private RestockItemRepository restockItemRepository;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -62,7 +67,13 @@ public class UserController {
     }
 
     @GetMapping("/warehouse-manager/home-page")
-    public String viewFirstPageWarehouseManager() {
+    public String viewFirstPageWarehouseManager(Model model) {
+        List<Order>todayReturnOrders = orderService.getOrdersToSentToday();
+        long returnOrderCount = todayReturnOrders.size();
+        List<Order>todayPendingOrders = orderService.getOrdersToReceiveToday();
+        long pendingOrderCount = todayPendingOrders.size();
+        model.addAttribute("returnOrderCount", returnOrderCount);
+        model.addAttribute("pendingOrderCount", pendingOrderCount);
         return "warehouse_manager_home_page";
     }
 }

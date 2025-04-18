@@ -146,5 +146,4 @@ public class ProductController {
         restockItemService.removeItem(id);
         return "redirect:/products/restock-list";
     }
-
 }

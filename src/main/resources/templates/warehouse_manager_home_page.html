@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="ISO-8859-1">
-    <title>List Users</title>
+    <title>Home page</title>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
@@ -30,16 +30,16 @@
 
 <div class="wheel-container">
     <div class="wheel">
-        <a href="/orders/to-receive/warehouse-manager">Pending Orders</a>
+        <a href="/orders/to-receive/warehouse-manager">Pending Orders<span th:if="${pendingOrderCount > 0}" class="notification-badge" th:text="${pendingOrderCount}"></a>
     </div>
     <div class="wheel">
         <a href="/orders/received">Received Orders</a>
     </div>
     <div class="wheel">
-        <a href="/orders/to-return/warehouse-manager">Orders for Return</a>
+        <a href="/orders/to-return/warehouse-manager">Orders for Return<span th:if="${returnOrderCount > 0}" class="notification-badge" th:text="${returnOrderCount}"></span></a>
     </div>
     <div class="wheel">
-        <a href="/products/restock-list">Out-of-Stock Notifictaion<span th:if="${restockCount > 0}" class="notification-badge" th:text="${restockCount}"></span></a>
+        <a href="/products/restock-list">Out-of-Stock Notifictaion</a>
     </div>
 </div>
 </body>

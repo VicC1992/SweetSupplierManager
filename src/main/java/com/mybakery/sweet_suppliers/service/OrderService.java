@@ -143,7 +143,6 @@ public class OrderService {
                     return datePart != null && LocalDate.parse(datePart, formatter).equals(today);
                 })
                 .collect(Collectors.toList());
-
     }
 
     private String extractDateFromOrderName(String orderName) {
