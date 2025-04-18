@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:24-jdk-alpine
 
 WORKDIR /app
 
-COPY . /app
+COPY target/sweet-suppliers-0.0.1-SNAPSHOT.jar app.jar
 
-RUN ./mvnw clean package -DskipTests
+EXPOSE 8080
 
-CMD ["java", "-jar", "target/SweetSupplierManager-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
