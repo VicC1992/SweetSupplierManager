@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: sweet-supplier-manager
+    env: java
+    plan: free
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar target/sweet-suppliers-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-d01p3hadbo4c738vv5rg-a:5432/sweet_db_r9g9
+      - key: SPRING_DATASOURCE_USERNAME
+        value: sweet_db_r9g9_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: pkMGpVHUZ7sSd0KrWYZBxTsDuX78IW1X
