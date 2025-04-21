@@ -1,10 +1,21 @@
 services:
   - type: web
     name: sweet-supplier-manager
-    env: java
+    env: docker
     plan: free
-    buildCommand: ./mvnw clean package
-    startCommand: java -jar target/*.jar
+    dockerfilePath: Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: default
+      - key: DB_URL
+        fromDatabase:
+          name: sweet_db
+          property: connectionString
+      - key: DB_USERNAME
+        fromDatabase:
+          name: sweet_db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: sweet_db
+          property: password
