@@ -129,7 +129,7 @@ public class OrderController {
 
         List<Order> inProcessOrders = allOrders.stream()
                 .filter(order -> order.getStatus() == OrderStatus.InProcess)
-                .toList();
+                .collect(Collectors.toList());
         model.addAttribute("orders", inProcessOrders);
         model.addAttribute("supplierProductId", supplierProductId);
 
