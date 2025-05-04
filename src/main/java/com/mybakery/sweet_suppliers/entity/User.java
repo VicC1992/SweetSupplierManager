@@ -15,6 +15,9 @@ public class User {
     @Column(nullable = false, length = 64)
     private String password;
 
+    @Column(name = "must_change_password")
+    private boolean mustChangePassword = false;
+
     @Column(name = "first_name", nullable = false, length = 20)
     private String firstName;
 
@@ -55,6 +58,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isMustChangePassword() {
+        return mustChangePassword;
+    }
+
+    public void setMustChangePassword(boolean mustChangePassword) {
+        this.mustChangePassword = mustChangePassword;
     }
 
     public String getFirstName() {

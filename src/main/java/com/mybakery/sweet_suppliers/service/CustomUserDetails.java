@@ -38,6 +38,11 @@ public class CustomUserDetails implements UserDetails {
         return user.getLastName();
     }
 
+    public boolean isMustChangePassword() {
+        return user.isMustChangePassword();
+    }
+
+
     @Override
     public String getUsername() {
         return user.getEmail();

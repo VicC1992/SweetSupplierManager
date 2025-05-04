@@ -1,22 +1,21 @@
 package com.mybakery.sweet_suppliers.controller;
 
-import com.mybakery.sweet_suppliers.Enums.RoleName;
 import com.mybakery.sweet_suppliers.entity.Order;
-import com.mybakery.sweet_suppliers.entity.Role;
-import com.mybakery.sweet_suppliers.entity.Supplier;
 import com.mybakery.sweet_suppliers.entity.User;
 import com.mybakery.sweet_suppliers.repository.RestockItemRepository;
 import com.mybakery.sweet_suppliers.repository.SupplierRepository;
 import com.mybakery.sweet_suppliers.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.mybakery.sweet_suppliers.repository.RoleRepository;
 import com.mybakery.sweet_suppliers.repository.UserRepository;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -34,30 +33,10 @@ public class UserController {
     private RestockItemRepository restockItemRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private OrderService orderService;
-
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
-        return "signup_form";
-    }
-
-    @PostMapping("/register/save")
-    public String processRegister(User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        Role userRole = roleRepository.findByName(RoleName.ROLE_PROCUREMENT_MANAGER).orElseThrow(()-> new RuntimeException("Role PROCUREMENT_MANAGER not found"));
-        user.setRole(userRole);
-        userRepository.save(user);
-        return "register_success";
-    }
-    @GetMapping("/users")
-    public String listUsers(Model model) {
-        List<User> listUsers = userRepository.findAll();
-        model.addAttribute("listUsers", listUsers);
-        return "users";
-    }
 
     @GetMapping("/procurement-manager/home-page")
     public String viewFirstPageProcurementManager(Model model) {
@@ -75,5 +54,33 @@ public class UserController {
         model.addAttribute("returnOrderCount", returnOrderCount);
         model.addAttribute("pendingOrderCount", pendingOrderCount);
         return "warehouse_manager_home_page";
+    }
+
+    @GetMapping("/change-password")
+    public String showChangePasswordForm() {
+        return "change_password";
+    }
+
+    @PostMapping("change-password")
+    public String processChangePassword(@RequestParam("newPassword") String newPassword, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName())
+                .orElseThrow(()-> new RuntimeException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setMustChangePassword(false);
+        userRepository.save(user);
+
+        String roleName = user.getRole().getName().name();
+
+        switch (roleName) {
+            case "ROLE_ADMIN":
+                    return "redirect:/admin/user_list";
+            case "ROLE_PROCUREMENT_MANAGER":
+                    return "redirect:/procurement-manager/home-page";
+            case "ROLE_WAREHOUSE_MANAGER":
+                return "redirect:/warehouse-manager/home-page";
+            default:
+                return "redirect:/main_page";
+        }
     }
 }
