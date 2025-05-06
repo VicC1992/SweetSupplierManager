@@ -38,14 +38,14 @@ public class UserController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/procurement-manager/home-page")
+    @GetMapping("/procurement-manager/home")
     public String viewFirstPageProcurementManager(Model model) {
         long restockCount = restockItemRepository.count();
         model.addAttribute("restockCount", restockCount);
         return "procurement_manager_home_page";
     }
 
-    @GetMapping("/warehouse-manager/home-page")
+    @GetMapping("/warehouse-manager/home")
     public String viewFirstPageWarehouseManager(Model model) {
         List<Order>todayReturnOrders = orderService.getOrdersToSentToday();
         long returnOrderCount = todayReturnOrders.size();
@@ -76,9 +76,9 @@ public class UserController {
             case "ROLE_ADMIN":
                     return "redirect:/admin/user_list";
             case "ROLE_PROCUREMENT_MANAGER":
-                    return "redirect:/procurement-manager/home-page";
+                    return "redirect:/procurement-manager/home";
             case "ROLE_WAREHOUSE_MANAGER":
-                return "redirect:/warehouse-manager/home-page";
+                return "redirect:/warehouse-manager/home";
             default:
                 return "redirect:/main_page";
         }

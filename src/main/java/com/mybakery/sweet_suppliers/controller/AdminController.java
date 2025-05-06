@@ -30,7 +30,7 @@ public class AdminController {
     @Autowired
     private RoleRepository roleRepository;
 
-    @GetMapping("/home-page")
+    @GetMapping("/home")
     public String listUsers(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "admin_home_page";
@@ -56,7 +56,7 @@ public class AdminController {
         return "create_edit_user";
     }
 
-    @PostMapping("/save-user")
+    @PostMapping("/user/save")
     public String saveOrUpdateUser(@ModelAttribute UserDto userDto) {
         User user;
 
@@ -83,22 +83,22 @@ public class AdminController {
             user.setMustChangePassword(true);
         }
         userRepository.save(user);
-        return "redirect:/admin/home-page";
+        return "redirect:/admin/home";
     }
 
-    @GetMapping("/delete-user")
-    public String deleteUser(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+    @PostMapping("/user/{id}/delete")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.getRole().getName() == RoleName.ROLE_ADMIN) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Admin users cannot be deleted.");
-                return "redirect:/admin/home-page";
+                return "redirect:/admin/home";
             }
             userRepository.deleteById(id);
         }
-        return "redirect:/admin/home-page";
+        return "redirect:/admin/home";
     }
 
     @GetMapping("/reset-password")
@@ -110,7 +110,7 @@ public class AdminController {
 
             if (user.getRole().getName() == RoleName.ROLE_ADMIN) {
                 redirectAttributes.addFlashAttribute("errorMessage", "You cannot reset the password of an Admin.");
-                return "redirect:/admin/home-page";
+                return "redirect:/admin/home";
             }
 
             user.setPassword(passwordEncoder.encode("00000"));
@@ -120,7 +120,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("successMessage", "Password was reset to '00000'.");
         }
 
-        return "redirect:/admin/home-page";
+        return "redirect:/admin/home";
     }
 
     @GetMapping("/change-own-password")
@@ -147,7 +147,7 @@ public class AdminController {
         userRepository.save(user);
 
         redirectAttributes.addFlashAttribute("successMessage", "Password changed successfully.");
-        return "redirect:/admin/home-page";
+        return "redirect:/admin/home";
     }
 
 }

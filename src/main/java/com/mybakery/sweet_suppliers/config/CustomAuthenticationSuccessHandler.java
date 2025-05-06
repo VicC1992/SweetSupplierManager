@@ -27,13 +27,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             String role = authority.getAuthority();
 
             if (role.equals("ROLE_ADMIN")) {
-                response.sendRedirect("/admin/home-page");
+                response.sendRedirect("/admin/home");
                 return;
             } else if (role.equals("ROLE_PROCUREMENT_MANAGER")) {
-                response.sendRedirect("/procurement-manager/home-page");
+                response.sendRedirect("/procurement-manager/home");
                 return;
             } else if (role.equals("ROLE_WAREHOUSE_MANAGER")) {
-                response.sendRedirect("/warehouse-manager/home-page");
+                response.sendRedirect("/warehouse-manager/home");
                 return;
             }
         }

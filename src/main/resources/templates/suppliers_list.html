@@ -14,14 +14,12 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between align-items-center">
 
-            <!-- Stânga: Logo + Titlu -->
             <div class="d-flex align-items-center">
-                <a class="navbar-brand d-flex align-items-center" th:href="@{/procurement-manager/home-page}">
+                <a class="navbar-brand d-flex align-items-center" th:href="@{/procurement-manager/home}">
                     <img src="/images/icon.jpg" alt="My Logo" width="45" height="45" class="me-2">
                 </a>
             </div>
 
-            <!-- Mijloc: Meniu centrat -->
             <div class="d-none d-lg-block">
                 <ul class="navbar-nav flex-row gap-4">
                     <li class="nav-item">
@@ -33,7 +31,6 @@
                 </ul>
             </div>
 
-            <!-- Dreapta: Sign Out -->
             <form th:action="@{/logout}" method="post" class="d-flex">
                 <button type="submit" class="btn btn-sm btn-warning">Sign Out</button>
             </form>
